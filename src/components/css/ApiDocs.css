@@ -1,0 +1,665 @@
+.api-docs {
+  font-family: 'Arial', sans-serif;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+}
+
+.api-header {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+  position: sticky;
+  top: 0;
+  background-color: #f9f9f9;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.api-header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.version {
+  font-size: 13px;
+  color: #fff;
+  background-color: #3f51b5;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.oas {
+  background-color: #ff9800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.api-info {
+  font-size: 13px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.api-info a {
+  color: #3f51b5;
+  text-decoration: none;
+}
+
+.server-selection {
+  margin-top: 8px;
+}
+
+.server-selection label {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.server-selection select {
+  padding: 5px;
+  font-size: 13px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  width: 100%;
+  max-width: 300px;
+}
+
+.api-content {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  height: calc(100vh - 180px);
+  overflow: hidden;
+}
+
+ .route-sidebar {
+  width: 260px; /* Tăng nhẹ chiều rộng để thoáng hơn */
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0; /* Màu viền nhẹ hơn */
+  padding: 15px; /* Tăng padding cho không gian thoải mái */
+  position: sticky;
+  top: 20px;
+  overflow-y: auto;
+  max-height: 80vh;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Thêm bóng nhẹ để tăng chiều sâu */
+  border-radius: 8px; /* Bo góc nhẹ */
+}
+
+.route-sidebar h2 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #222; /* Màu đậm hơn cho tiêu đề */
+  font-weight: 600;
+  border-bottom: 2px solid #e8ecef; /* Viền dưới đậm hơn một chút */
+  padding-bottom: 8px;
+  letter-spacing: 0.5px; /* Tăng khoảng cách chữ cho tiêu đề */
+}
+
+.route-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* Đảm bảo bố cục dọc */
+  gap: 6px; /* Khoảng cách giữa các route */
+}
+
+.route-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 15px; /* Tăng padding để nút dễ bấm hơn */
+  font-size: 15px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #333; /* Màu chữ tối hơn một chút */
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  text-align: left;
+  position: relative;
+  font-weight: 500; /* Tăng độ đậm chữ nhẹ */
+}
+
+.route-btn:hover {
+  background-color: #f1f6ff; /* Màu nền hover nhẹ nhàng hơn */
+  color: #1e88e5; /* Màu chữ khi hover */
+  transform: translateX(4px); /* Hiệu ứng dịch chuyển nhẹ khi hover */
+}
+
+.route-btn.active {
+  background-color: #e3f2fd; /* Màu nền khi active */
+  color: #1e88e5;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px #bbdefb; /* Viền nhẹ khi active */
+}
+
+.route-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px; /* Tăng chiều cao thanh active */
+  background-color: #1e88e5; /* Màu thanh active nổi bật hơn */
+  border-radius: 0 4px 4px 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+.route-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    position: static;
+    max-height: 40vh;
+    padding: 12px;
+    border-radius: 6px; /* Bo góc nhẹ hơn cho mobile */
+  }
+
+  .route-sidebar h2 {
+    font-size: 15px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+  }
+
+  .route-btn {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .route-btn.active::before {
+    height: 20px; /* Giảm nhẹ chiều cao thanh active trên mobile */
+  }
+}
+
+.route-details {
+  flex: 1;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.endpoint-list {
+  text-align: left;
+  margin-top: 15px;
+  flex-grow: 1;
+  width: 100%;
+  overflow-y: auto;
+  padding-right: 0;
+  box-sizing: border-box;
+}
+
+.endpoint-item {
+  margin-bottom: 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.endpoint-item:has(.method-btn.get) {
+  background-color: #e8f5e9;
+}
+.endpoint-item:has(.method-btn.post) {
+  background-color: #fff3e0;
+}
+.endpoint-item:has(.method-btn.put) {
+  background-color: #e3f2fd;
+}
+.endpoint-item:has(.method-btn.delete) {
+  background-color: #ffebee;
+}
+
+.endpoint-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+  padding: 8px;
+  border: 1px solid;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
+}
+
+.endpoint-header .method-btn.get ~ * {
+  border-color: #64cc71;
+}
+.endpoint-header .method-btn.post ~ * {
+  border-color: #b38353;
+}
+.endpoint-header .method-btn.put ~ * {
+  border-color: #1976d2;
+}
+.endpoint-header .method-btn.delete ~ * {
+  border-color: #d32f2f;
+}
+
+.endpoint-header:hover {
+  background-color: #e0e0e0;
+}
+
+.method-btn {
+  width: 80px;
+  padding: 5px;
+  text-align: center;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.method-btn.get {
+  background-color: #4caf50;
+}
+
+.method-btn.post {
+  background-color: #ff9800;
+}
+
+.method-btn.put {
+  background-color: #2196f3;
+}
+
+.method-btn.delete {
+  background-color: #f44336;
+}
+
+.endpoint-path {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  flex-grow: 1;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
+.endpoint-desc {
+  flex: 2;
+  font-size: 14px;
+  color: #666;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  box-sizing: border-box;
+}
+
+.endpoint-details {
+  background-color: transparent;
+  padding: 12px;
+  border-radius: 0 0 4px 4px;
+  margin-top: 0;
+  overflow-y: auto;
+  border-left: 4px solid #3f51b5;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-grow: 1;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.auth-section {
+  background-color: #f5f5f5;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.auth-section p {
+  margin: 5px 0;
+  font-size: 13px;
+}
+
+.param-table, .error-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.param-table th, .param-table td,
+.error-table th, .error-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.param-table th, .error-table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+.param-table tr.required td {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.response-schema {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: transparent;
+  border-radius: 0 0 4px 4px;
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.response-schema h5 {
+  font-size: 13px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.response-schema pre,
+.detail-section pre {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-x: auto;
+  margin: 0;
+  color: #ffffff;
+  background-color: #333333;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.detail-section {
+  margin-bottom: 12px;
+}
+
+.detail-section h4 {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.detail-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.detail-section li {
+  padding: 5px 0;
+  color: #444;
+  font-size: 13px;
+}
+
+.detail-section li.required {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .api-docs {
+    padding: 10px;
+  }
+
+  .api-content {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .api-header {
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+
+  .api-header h1 {
+    font-size: 18px;
+  }
+
+  .version, .api-info, .server-selection select, .auth-section p, .detail-section li {
+    font-size: 12px;
+  }
+
+  .server-selection {
+    margin-top: 6px;
+  }
+
+  .server-selection label {
+    font-size: 12px;
+  }
+
+  .route-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    position: static;
+    max-height: 40vh;
+    overflow-y: auto;
+    padding: 8px;
+  }
+
+  .route-sidebar h2 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .route-btn {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .route-btn.active::before {
+    display: none;
+  }
+
+  .route-details {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .endpoint-list {
+    margin-top: 10px;
+  }
+
+  .endpoint-item {
+    margin-bottom: 10px;
+  }
+
+  .endpoint-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .method-btn {
+    width: 100%;
+    max-width: 100px;
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .endpoint-path {
+    font-size: 13px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .endpoint-desc {
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .endpoint-details {
+    padding: 10px;
+    border-left-width: 3px;
+  }
+
+  .param-table th, .param-table td,
+  .error-table th, .error-table td {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .response-schema, .detail-section pre {
+    font-size: 11px;
+    padding: 6px;
+  }
+
+  .detail-section h4 {
+    font-size: 14px;
+  }
+
+  /* Đảm bảo không có cuộn ngang trong code blocks */
+  .response-schema pre,
+  .detail-section pre {
+    word-break: break-word;
+    overflow-x: hidden;
+  }
+
+  /* Tối ưu hóa bảng cho mobile */
+  .param-table, .error-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .param-table thead, .error-table thead {
+    display: none;
+  }
+
+  .param-table tr, .error-table tr {
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px;
+  }
+
+  .param-table td, .error-table td {
+    display: block;
+    text-align: left;
+    border: none;
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .param-table td:before, .error-table td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+    font-size: 12px;
+  }
+
+  .param-table td:first-child:before {
+    content: 'Name: ';
+  }
+
+  .param-table td:nth-child(2):before {
+    content: 'Type: ';
+  }
+
+  .param-table td:nth-child(3):before {
+    content: 'Description: ';
+  }
+
+  .param-table td:nth-child(4):before {
+    content: 'Required: ';
+  }
+
+  .error-table td:first-child:before {
+    content: 'Status: ';
+  }
+
+  .error-table td:nth-child(2):before {
+    content: 'Description: ';
+  }
+}
+
+@media (max-width: 480px) {
+  .api-docs {
+    padding: 8px;
+  }
+
+  .api-header h1 {
+    font-size: 16px;
+  }
+
+  .version, .api-info, .server-selection select, .auth-section p, .detail-section li {
+    font-size: 11px;
+  }
+
+  .server-selection select {
+    max-width: 200px;
+  }
+
+  .route-sidebar {
+    max-height: 30vh;
+    padding: 10px;
+  }
+
+  .route-sidebar h2 {
+    font-size: 14px;
+  }
+
+  .route-btn {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .route-btn.active::before {
+    height: 18px;
+  }
+
+  .route-details {
+    padding: 8px;
+  }
+
+  .endpoint-header {
+    padding: 5px;
+  }
+
+  .method-btn {
+    max-width: 80px;
+    font-size: 11px;
+  }
+
+  .endpoint-path, .endpoint-desc {
+    font-size: 12px;
+  }
+
+  .endpoint-details {
+    padding: 8px;
+  }
+
+  .param-table td:before, .error-table td:before {
+    width: 80px;
+    font-size: 11px;
+  }
+}

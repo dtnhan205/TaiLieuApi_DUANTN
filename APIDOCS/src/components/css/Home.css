@@ -1,0 +1,230 @@
+.api-home {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  color: #2e2e2e;
+  background-color: #f5f7f5; /* Màu nền nhạt, thiên nhiên */
+  box-sizing: border-box;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.home-header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.home-header h1 {
+  font-size: 2.75rem;
+  color: #2e7d32; /* Xanh lá đậm */
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.home-header .subtitle {
+  font-size: 1.25rem;
+  color: #4a4a4a;
+  line-height: 1.6;
+}
+
+.home-header .subtitle strong {
+  color: #2e7d32;
+}
+
+.home-intro,
+.home-features,
+.home-quickstart,
+.home-contact {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.home-intro.visible,
+.home-features.visible,
+.home-quickstart.visible,
+.home-contact.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.home-intro h2,
+.home-features h2,
+.home-quickstart h2,
+.home-contact h2 {
+  font-size: 1.75rem;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.home-intro p,
+.home-features p,
+.home-quickstart p,
+.home-contact p {
+  font-size: 1.125rem;
+  color: #4a4a4a;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.home-features ul,
+.home-quickstart ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-features li,
+.home-quickstart li {
+  font-size: 1.125rem;
+  color: #4a4a4a;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.home-features ul {
+  list-style-type: disc;
+}
+
+.home-quickstart ol {
+  list-style-type: decimal;
+}
+
+.home-quickstart a,
+.home-contact a {
+  color: #2e7d32;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.home-quickstart a:hover,
+.home-contact a:hover {
+  color: #1b5e20; /* Xanh lá đậm hơn khi hover */
+  text-decoration: underline;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  color: #fff !important;
+  background: linear-gradient(135deg, #2e7d32, #4caf50); /* Gradient xanh lá */
+  border-radius: 6px;
+  text-decoration: none !important;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.cta-button:hover {
+  background: linear-gradient(135deg, #1b5e20, #388e3c);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .api-home {
+    padding: 1.5rem 1rem;
+  }
+
+  .home-header h1 {
+    font-size: 2rem;
+  }
+
+  .home-header .subtitle {
+    font-size: 1rem;
+  }
+
+  .home-intro,
+  .home-features,
+  .home-quickstart,
+  .home-contact {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .home-intro h2,
+  .home-features h2,
+  .home-quickstart h2,
+  .home-contact h2 {
+    font-size: 1.5rem;
+  }
+
+  .home-intro p,
+  .home-features p,
+  .home-quickstart p,
+  .home-contact p {
+    font-size: 1rem;
+  }
+
+  .home-features li,
+  .home-quickstart li {
+    font-size: 1rem;
+  }
+
+  .cta-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .api-home {
+    padding: 1rem 0.75rem;
+  }
+
+  .home-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .home-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .home-header .subtitle {
+    font-size: 0.875rem;
+  }
+
+  .home-intro h2,
+  .home-features h2,
+  .home-quickstart h2,
+  .home-contact h2 {
+    font-size: 1.25rem;
+  }
+
+  .home-intro p,
+  .home-features p,
+  .home-quickstart p,
+  .home-contact p {
+    font-size: 0.875rem;
+  }
+
+  .home-features li,
+  .home-quickstart li {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+}

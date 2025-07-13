@@ -77,7 +77,7 @@
   overflow: hidden;
 }
 
- .route-sidebar {
+.route-sidebar {
   width: 260px; /* Tăng nhẹ chiều rộng để thoáng hơn */
   background-color: #ffffff;
   border-right: 1px solid #e0e0e0; /* Màu viền nhẹ hơn */
@@ -155,7 +155,7 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
-.route-sidebar {
+  .route-sidebar {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid #e0e0e0;
@@ -216,6 +216,14 @@
   overflow: hidden;
   border-radius: 4px;
   box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.endpoint-item.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .endpoint-item:has(.method-btn.get) {
@@ -420,6 +428,67 @@
   font-weight: bold;
 }
 
+/* Search container */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
+/* Search input */
+.search-input {
+  flex-grow: 1;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: 'Arial', sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 5px rgba(63, 81, 181, 0.3);
+}
+
+/* Search button */
+.search-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 500;
+  color: #fff;
+  background-color: #3f51b5; /* Màu nền giống .api-header .version */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-btn:hover {
+  background-color: #303f9f; /* Tông đậm hơn khi hover */
+  transform: translateY(-1px);
+}
+
+.search-btn:active {
+  transform: translateY(0);
+}
+
+/* Optional: Add search icon (using SVG) */
+.search-btn::before {
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+  margin-right: 4px;
+}
+
 @media (max-width: 768px) {
   .api-docs {
     padding: 10px;
@@ -600,6 +669,27 @@
   .error-table td:nth-child(2):before {
     content: 'Description: ';
   }
+
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    max-width: 100%;
+  }
+
+  .search-input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .search-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .search-btn::before {
+    transform: scale(0.9); /* Giảm kích thước icon trên mobile */
+  }
 }
 
 @media (max-width: 480px) {
@@ -661,5 +751,19 @@
   .param-table td:before, .error-table td:before {
     width: 80px;
     font-size: 11px;
+  }
+
+  .search-container {
+    gap: 6px;
+  }
+
+  .search-input {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .search-btn {
+    padding: 6px 10px;
+    font-size: 12px;
   }
 }

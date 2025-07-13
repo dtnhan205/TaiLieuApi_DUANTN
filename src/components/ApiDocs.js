@@ -4,7 +4,7 @@ import Sidebar from './Sidebar';
 import RouteDetails from './RouteDetails';
 import Products from './Products';
 import Category from './Category';
-import Auth from './Auth';
+import GoogleAuth from './GoogleAuth';
 import Brand from './Brand';
 import Cart from './Cart';
 import Comment from './Comment';
@@ -15,6 +15,8 @@ import Order from './Order';
 import Payment from './Payment';
 import Users from './Users';
 import MBBank from './MBBank';
+import Interface from './Interface';
+
 import './css/ApiDocs.css';
 
 const ApiDocs = () => {
@@ -26,7 +28,7 @@ const ApiDocs = () => {
   const routes = [
     { name: 'products', label: 'Products', component: Products },
     { name: 'category', label: 'Category', component: Category },
-    { name: 'auth', label: 'Auth', component: Auth },
+    { name: 'GoogleAuth', label: 'GoogleAuth', component: GoogleAuth },
     { name: 'brand', label: 'Brand', component: Brand },
     { name: 'cart', label: 'Cart', component: Cart },
     { name: 'comment', label: 'Comment', component: Comment },
@@ -37,6 +39,7 @@ const ApiDocs = () => {
     { name: 'payment', label: 'Payment', component: Payment },
     { name: 'users', label: 'Users', component: Users },
     { name: 'mbBank', label: 'MB Bank', component: MBBank },
+    { name: 'interface', label: 'Interface', component: Interface }
   ];
 
   const handleRouteClick = (route) => {

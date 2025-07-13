@@ -11,6 +11,14 @@
 .home-header {
   text-align: center;
   margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.home-header.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .home-header h1 {
@@ -39,6 +47,17 @@
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.home-intro.visible,
+.home-features.visible,
+.home-quickstart.visible,
+.home-contact.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .home-intro h2,
@@ -204,7 +223,8 @@
   .cta-button {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
-    width: 50%;
-    margin: 10 auto;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
   }
 }

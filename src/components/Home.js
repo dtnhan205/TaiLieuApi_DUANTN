@@ -1,7 +1,32 @@
 import { NavLink } from 'react-router-dom';
+import { useEffect } from 'react';
 import './css/Home.css';
 
 function Home() {
+  useEffect(() => {
+    const sections = document.querySelectorAll('.home-header, .home-intro, .home-features, .home-quickstart, .home-contact');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // Ngừng quan sát sau khi section đã xuất hiện
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Section xuất hiện khi 10% của nó nằm trong viewport
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
+
   return (
     <div className="api-home">
       <header className="home-header">

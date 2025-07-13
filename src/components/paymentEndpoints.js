@@ -128,6 +128,49 @@ const paymentEndpoints = [
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 500, description: 'Lỗi máy chủ' }
     ]
+  },
+  {
+    method: 'POST',
+    path: '/api/payments/get-payments',
+    description: 'Lấy tất cả thông tin thanh toán',
+    fullDescription: 'Trả về danh sách tất cả thanh toán trong hệ thống, bao gồm mã thanh toán, số tiền, thời gian giao dịch, tên người chuyển khoản (từ username của user hoặc nội dung giao dịch), mô tả, trạng thái, và ID đơn hàng. Yêu cầu xác thực và quyền admin thông qua token JWT.',
+    auth: {
+      required: true,
+      header: 'Authorization: Bearer <token>',
+      description: 'Token JWT của người dùng với vai trò admin được yêu cầu trong header.'
+    },
+    parameters: [
+      { name: 'userId', type: 'string', description: 'ObjectId của người dùng (tùy chọn)', required: false },
+      { name: 'orderId', type: 'string', description: 'ObjectId của đơn hàng (tùy chọn)', required: false }
+    ],
+    requestExample: {
+      headers: { 'Authorization': 'Bearer <admin-token>' },
+      body: {} // Có thể để trống để lấy tất cả, hoặc lọc theo userId/orderId
+    },
+    response: {
+      status: 200,
+      description: 'Lấy tất cả thông tin thanh toán thành công',
+      example: {
+        status: 'success',
+        message: 'Lấy thông tin thanh toán thành công',
+        data: [
+          {
+            paymentCode: 'thanhtoan12345',
+            amount: 200000,
+            transactionDate: '2025-07-13T21:00:00+07:00',
+            bankUserName: 'Nguyen Van A',
+            description: 'Thanh toán cho đơn hàng',
+            status: 'success',
+            orderId: '60d5f8e9b1a2b4f8e8f9e2c7'
+          }
+        ]
+      }
+    },
+    errorResponses: [
+      { status: 400, description: 'userId hoặc orderId không hợp lệ nếu được cung cấp' },
+      { status: 401, description: 'Không có token, token không hợp lệ, hoặc không có quyền admin' },
+      { status: 500, description: 'Lỗi máy chủ' }
+    ]
   }
 ];
 

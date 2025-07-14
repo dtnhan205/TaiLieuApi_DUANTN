@@ -1,10 +1,10 @@
 /* Define CSS variables for theming */
 :root {
-  --primary-color: #357E38; /* Pure-Botanica green */
-  --hover-color: #e8f5e9; /* Light green for hover */
+  --primary-color: #5e5e5e; /* Green lighter than #357E38 for a softer look */
+  --hover-color: #e8f5e9; /* Light green for hover, unchanged */
   --text-color: #000000; /* Black text for light theme */
-  --gradient-start: #2a5f2c;
-  --gradient-end: #357E38;
+  --gradient-start: #80e9a0; /* Lighter green start for gradient */
+  --gradient-end: #275e2a; /* Softer primary green end */
   --glass-bg: rgba(255, 255, 255, 0.3); /* Stronger glassmorphism */
   --glass-blur: blur(22px);
   --glass-border: 1px solid rgba(255, 255, 255, 0.55);
@@ -14,8 +14,8 @@
 /* Dark theme overrides */
 [data-theme='dark'] {
   --text-color: #ffffff; /* White text for dark theme */
-  --gradient-start: #1a3c1a;
-  --gradient-end: #2a5f2c;
+  --gradient-start: #7CA98C; /* Softer dark green start */
+  --gradient-end: #5F9E64; /* Lighter dark green end */
   --glass-bg: rgba(50, 50, 50, 0.55);
   --theme-toggle-bg: rgba(50, 50, 50, 0.55);
 }

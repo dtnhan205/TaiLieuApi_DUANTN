@@ -262,7 +262,7 @@ const cartEndpoints = [
     method: 'POST',
     path: '/api/cart/checkout',
     description: 'Thanh toán giỏ hàng',
-    fullDescription: 'Tạo đơn hàng từ giỏ hàng của người dùng, kiểm tra địa chỉ, số điện thoại, phương thức thanh toán, và mã giảm giá (nếu có). Cập nhật tồn kho, xóa giỏ hàng, và trả về `paymentCode` cho thanh toán trực tuyến. Yêu cầu xác thực thông qua token JWT.',
+    fullDescription: 'Tạo đơn hàng từ giỏ hàng của người dùng, kiểm tra tính hợp lệ của địa chỉ, số điện thoại, phương thức thanh toán, và mã giảm giá (nếu có). Cập nhật tồn kho, lưu địa chỉ tạm thời, xóa giỏ hàng sau khi thành công, và tạo mã thanh toán duy nhất (`paymentCode`). Yêu cầu xác thực thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -275,14 +275,14 @@ const cartEndpoints = [
       { name: 'district', type: 'string', description: 'Quận/huyện', required: true },
       { name: 'cityOrProvince', type: 'string', description: 'Tỉnh/thành phố', required: true },
       { name: 'sdt', type: 'string', description: 'Số điện thoại (10 chữ số)', required: true },
-      { name: 'paymentMethod', type: 'string', description: 'Phương thức thanh toán', required: true },
-      { name: 'note', type: 'string', description: 'Ghi chú đơn hàng', required: false },
+      { name: 'paymentMethod', type: 'string', description: 'Phương thức thanh toán (ví dụ: COD, Visa)', required: true },
+      { name: 'note', type: 'string', description: 'Ghi chú đơn hàng (tuỳ chọn)', required: false },
       { name: 'couponCode', type: 'string', description: 'Mã giảm giá (nếu có)', required: false }
     ],
     requestExample: {
       headers: { 'Authorization': 'Bearer <token>' },
       body: {
-        userId: '60d5f8e9b1a2b4f8子e2b0',
+        userId: '60d5f8e9b1a2b4f8e8f9e2b0',
         addressLine: '123 Đường Láng',
         ward: 'Láng Thượng',
         district: 'Đống Đa',
@@ -309,85 +309,87 @@ const cartEndpoints = [
             {
               product: {
                 _id: '60d5f8e9b1a2b4f8e8f9e2b1',
-              name: 'Sản phẩm A',
+                name: 'Sản phẩm A',
+                images: ['image1.jpg']
+              },
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 2,
               images: ['image1.jpg']
-            },
-            optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
-            quantity: 2,
-            images: ['image1.jpg']
-          }
-        ],
+            }
+          ],
+          subtotal: 160000,
+          discount: 16000,
+          total: 144000,
+          address: {
+            addressLine: '123 Đường Láng',
+            ward: 'Láng Thượng',
+            district: 'Đống Đa',
+            cityOrProvince: 'Hà Nội'
+          },
+          sdt: '0123456789',
+          paymentMethod: 'COD',
+          note: 'Giao hàng trong giờ hành chính',
+          coupon: {
+            _id: '60d5f8e9b1a2b4f8e8f9e2c3',
+            code: 'DISCOUNT10'
+          },
+          paymentStatus: 'pending',
+          shippingStatus: 'pending'
+        },
+        paymentCode: 'thanhtoan28369',
+        warning: 'Đã loại bỏ 1 sản phẩm không hợp lệ khỏi giỏ hàng' // Cảnh báo nếu có
+      }
+    },
+    errorResponses: [
+      { status: 400, description: 'Thiếu hoặc dữ liệu không hợp lệ (userId, địa chỉ, số điện thoại, phương thức thanh toán, mã giảm giá)' },
+      { status: 400, description: 'Giỏ hàng trống hoặc không chứa sản phẩm hợp lệ' },
+      { status: 400, description: 'Số điện thoại không đúng định dạng (phải là 10 chữ số)' },
+      { status: 400, description: 'Không đủ số lượng tồn kho cho một hoặc nhiều sản phẩm' },
+      { status: 400, description: 'Mã giảm giá không hợp lệ, hết hạn, hoặc không đáp ứng điều kiện' },
+      { status: 401, description: 'Không có token hoặc token không hợp lệ' },
+      { status: 404, description: 'Người dùng hoặc giỏ hàng không tồn tại' },
+      { status: 500, description: 'Lỗi máy chủ' }
+    ]
+  },
+  {
+    method: 'POST',
+    path: '/api/cart/update-price',
+    description: 'Cập nhật giá giỏ hàng',
+    fullDescription: 'Tính toán giá giỏ hàng của người dùng, bao gồm tổng phụ (subtotal), giảm giá (nếu áp dụng mã giảm giá), và tổng cộng. Yêu cầu xác thực thông qua token JWT.',
+    auth: {
+      required: true,
+      header: 'Authorization: Bearer <token>',
+      description: 'Token JWT của người dùng được yêu cầu trong header.'
+    },
+    parameters: [
+      { name: 'userId', type: 'string', description: 'ObjectId của người dùng, gửi qua query hoặc body', required: true },
+      { name: 'couponCode', type: 'string', description: 'Mã giảm giá (nếu có)', required: false }
+    ],
+    requestExample: {
+      headers: { 'Authorization': 'Bearer <token>' },
+      body: {
+        userId: '60d5f8e9b1a2b4f8e8f9e2b0',
+        couponCode: 'DISCOUNT10'
+      }
+    },
+    response: {
+      status: 200,
+      description: 'Cập nhật giá thành công',
+      example: {
         subtotal: 160000,
         discount: 16000,
-        total: 144000,
-        address: {
-          addressLine: '123 Đường Láng',
-          ward: 'Láng Thượng',
-          district: 'Đống Đa',
-          cityOrProvince: 'Hà Nội'
-        },
-        sdt: '0123456789',
-        paymentMethod: 'COD',
-        note: 'Giao hàng trong giờ hành chính',
-        coupon: {
-          _id: '60d5f8e9b1a2b4f8e8f9e2c3',
-          code: 'DISCOUNT10'
-        },
-        paymentStatus: 'pending',
-        shippingStatus: 'pending'
-      },
-      paymentCode: 'thanhtoan28369',
-      warning: 'Đã loại bỏ 1 sản phẩm không hợp lệ khỏi giỏ hàng'
-    }
-  },
-  errorResponses: [
-    { status: 400, description: 'Thiếu hoặc dữ liệu không hợp lệ (userId, địa chỉ, số điện thoại, phương thức thanh toán, mã giảm giá)' },
-    { status: 400, description: 'Giỏ hàng trống hoặc không chứa sản phẩm hợp lệ' },
-    { status: 400, description: 'Không đủ số lượng tồn kho' },
-    { status: 401, description: 'Không có token hoặc token không hợp lệ' },
-    { status: 404, description: 'Người dùng hoặc giỏ hàng không tồn tại' },
-    { status: 500, description: 'Lỗi máy chủ' }
-  ]
-},
-{
-  method: 'POST',
-  path: '/api/cart/update-price',
-  description: 'Cập nhật giá giỏ hàng',
-  fullDescription: 'Tính toán giá giỏ hàng của người dùng, bao gồm tổng phụ (subtotal), giảm giá (nếu áp dụng mã giảm giá), và tổng cộng. Yêu cầu xác thực thông qua token JWT.',
-  auth: {
-    required: true,
-    header: 'Authorization: Bearer <token>',
-    description: 'Token JWT của người dùng được yêu cầu trong header.'
-  },
-  parameters: [
-    { name: 'userId', type: 'string', description: 'ObjectId của người dùng, gửi qua query hoặc body', required: true },
-    { name: 'couponCode', type: 'string', description: 'Mã giảm giá (nếu có)', required: false }
-  ],
-  requestExample: {
-    headers: { 'Authorization': 'Bearer <token>' },
-    body: {
-      userId: '60d5f8e9b1a2b4f8e8f9e2b0',
-      couponCode: 'DISCOUNT10'
-    }
-  },
-  response: {
-    status: 200,
-    description: 'Cập nhật giá thành công',
-    example: {
-      subtotal: 160000,
-      discount: 16000,
-      total: 144000
-    }
-  },
-  errorResponses: [
-    { status: 400, description: 'Thiếu hoặc userId không hợp lệ' },
-    { status: 400, description: 'Giỏ hàng trống hoặc không chứa sản phẩm hợp lệ' },
-    { status: 400, description: 'Mã giảm giá không hợp lệ, không hoạt động, hết hạn, hoặc không đáp ứng điều kiện' },
-    { status: 401, description: 'Không có token hoặc token không hợp lệ' },
-    { status: 404, description: 'Người dùng hoặc giỏ hàng không tồn tại' },
-    { status: 500, description: 'Lỗi máy chủ' }
-  ]
-}
+        total: 144000
+      }
+    },
+    errorResponses: [
+      { status: 400, description: 'Thiếu hoặc userId không hợp lệ' },
+      { status: 400, description: 'Giỏ hàng trống hoặc không chứa sản phẩm hợp lệ' },
+      { status: 400, description: 'Mã giảm giá không hợp lệ, không hoạt động, hết hạn, hoặc không đáp ứng điều kiện' },
+      { status: 401, description: 'Không có token hoặc token không hợp lệ' },
+      { status: 404, description: 'Người dùng hoặc giỏ hàng không tồn tại' },
+      { status: 500, description: 'Lỗi máy chủ' }
+    ]
+  }
 ];
 
 export default cartEndpoints;

@@ -6,16 +6,22 @@
   <title>API Pure Botanica</title>
   <link rel="icon" type="image/gif" href="https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000001992-png-hanh-tinh-vu-tru.png">
   <style>
+    /* Container để căn chỉnh các loader */
+    .loader-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      gap: 20px; /* Khoảng cách giữa các loader */
+    }
+
     .loader {
       height: 80px;
       aspect-ratio: 1;
       padding: 10px;
       border-radius: 20px;
       box-sizing: border-box;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      position: relative;
       mask: conic-gradient(#000 0 0) content-box exclude,conic-gradient(#000 0 0);
       filter: blur(12px);
     }
@@ -29,14 +35,67 @@
     @keyframes l3 {
       to {rotate: 1turn}
     }
+
+    .loader1 {
+      --b: 25%;
+      height: 80px;
+      aspect-ratio: 1/cos(30deg);
+      position: relative;
+      clip-path: polygon(50% 0,100% 100%,0 100%,50% 0,50% var(--b),calc(var(--b)*cos(30deg)) calc(100% - var(--b)/2),calc(100% - var(--b)*cos(30deg)) calc(100% - var(--b)/2),50% var(--b));
+      filter: blur(12px);
+    }
+    .loader1:before {
+      content: "";
+      position: absolute;
+      inset: -8% 0;
+      background: conic-gradient(#0000 35%,#0B486B,#0000 65%);
+      animation: l5 2s linear infinite;
+    }
+    @keyframes l5 {
+      to {rotate: 1turn}
+    }
+
+    .loader2 {
+      height: 80px;
+      aspect-ratio: 1;
+      box-sizing: border-box;
+      position: relative;
+      mask: 
+        radial-gradient(#0000 47%,#000 48% 71%,#0000 72%) exclude,
+        conic-gradient(#000 0 0) no-clip;
+      animation: l11 1.5s linear infinite;
+    }
+    .loader2:before {
+      content: "";
+      position: absolute;
+      inset: 0 35% 70%;
+      border-radius: 50%;
+      background: #000;
+      filter: blur(15px);
+    }
+    @keyframes l11 {
+      to {rotate: 1turn}
+    }
   </style>
 </head>
 <body>
   <div id="root"></div>
-  <div class="loader"></div>
+  <div class="loader-container" id="loaderContainer">
+    <div class="loader"></div>
+    <div class="loader1"></div>
+    <div class="loader2"></div>
+  </div>
 </body>
-</html>
 <script>
+  // Ẩn loader khi trang tải xong
+  window.onload = function() {
+    const loaderContainer = document.getElementById('loaderContainer');
+    if (loaderContainer) {
+      loaderContainer.style.display = 'none';
+    }
+  };
+
+  // Script thay đổi favicon
   const icons = [
     'https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000002048-png-hanh-tinh-vu-tru-300x257.png',
     'https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000002051-png-hanh-tinh-vu-tru.png',
@@ -52,3 +111,4 @@
     i = (i + 1) % icons.length;
   }, 500);
 </script>
+</html>

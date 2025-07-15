@@ -6,28 +6,30 @@
   <title>API Pure Botanica</title>
   <link rel="icon" type="image/gif" href="https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000001992-png-hanh-tinh-vu-tru.png">
   <style>
-.loader {
-  height: 80px;
-  aspect-ratio: 1;
-  padding: 10px;
-  border-radius: 20px;
-  box-sizing: border-box;
-  position: relative;
-  mask: conic-gradient(#000 0 0) content-box exclude,conic-gradient(#000 0 0);
-  filter: blur(12px);
-}
-.loader:before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-conic-gradient(#0000 0 5%,#C02942,#0000 20% 50%);
-  animation: l3 1.5s linear infinite;
-}
-@keyframes l3 {
-  to {rotate: 1turn}
-}
+    .loader {
+      height: 80px;
+      aspect-ratio: 1;
+      padding: 10px;
+      border-radius: 20px;
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      mask: conic-gradient(#000 0 0) content-box exclude,conic-gradient(#000 0 0);
+      filter: blur(12px);
+    }
+    .loader:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-conic-gradient(#0000 0 5%,#C02942,#0000 20% 50%);
+      animation: l3 1.5s linear infinite;
+    }
+    @keyframes l3 {
+      to {rotate: 1turn}
+    }
   </style>
-
 </head>
 <body>
   <div id="root"></div>
@@ -35,20 +37,18 @@
 </body>
 </html>
 <script>
-const icons = [
-  'https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000002048-png-hanh-tinh-vu-tru-300x257.png',
-  'https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000002051-png-hanh-tinh-vu-tru.png',
-  'https://png.pngtree.com/png-clipart/20240903/original/pngtree-jupiter-on-transparent-background-png-image_15928474.png',
-  'https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000001992-png-hanh-tinh-vu-tru.png',
-  'https://png.pngtree.com/png-vector/20240312/ourmid/pngtree-watercolor-neptune-space-clip-art-png-image_11935911.png'
+  const icons = [
+    'https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000002048-png-hanh-tinh-vu-tru-300x257.png',
+    'https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000002051-png-hanh-tinh-vu-tru.png',
+    'https://png.pngtree.com/png-clipart/20240903/original/pngtree-jupiter-on-transparent-background-png-image_15928474.png',
+    'https://free.vector6.com/wp-content/uploads/2021/05/PNG-0000001992-png-hanh-tinh-vu-tru.png',
+    'https://png.pngtree.com/png-vector/20240312/ourmid/pngtree-watercolor-neptune-space-clip-art-png-image_11935911.png'
+  ];
 
-
-];
-
-let i = 0;
-setInterval(() => {
-  const link = document.querySelector("link[rel~='icon']");
-  if (link) link.href = icons[i];
-  i = (i + 1) % icons.length;
-}, 500);
+  let i = 0;
+  setInterval(() => {
+    const link = document.querySelector("link[rel~='icon']");
+    if (link) link.href = icons[i];
+    i = (i + 1) % icons.length;
+  }, 500);
 </script>

@@ -1,7 +1,7 @@
 const cartEndpoints = [
   {
     method: 'GET',
-    path: '/api/cart/getall',
+    path: '/api/carts/getall',
     description: 'Lấy danh sách tất cả giỏ hàng',
     fullDescription: 'Trả về danh sách tất cả giỏ hàng trong hệ thống, bao gồm thông tin người dùng và sản phẩm. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
@@ -52,7 +52,7 @@ const cartEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/cart',
+    path: '/api/carts',
     description: 'Lấy giỏ hàng của người dùng',
     fullDescription: 'Trả về giỏ hàng của một người dùng cụ thể dựa trên `userId`. Yêu cầu xác thực thông qua token JWT.',
     auth: {
@@ -97,7 +97,7 @@ const cartEndpoints = [
   },
   {
     method: 'POST',
-    path: '/api/cart/add',
+    path: '/api/carts/add',
     description: 'Thêm sản phẩm vào giỏ hàng',
     fullDescription: 'Thêm sản phẩm vào giỏ hàng của người dùng với `productId`, `optionIds`, và `quantity`. Kiểm tra tồn kho và tính hợp lệ của sản phẩm/biến thể. Yêu cầu xác thực thông qua token JWT.',
     auth: {
@@ -149,7 +149,7 @@ const cartEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/cart/update',
+    path: '/api/carts/update',
     description: 'Cập nhật số lượng sản phẩm trong giỏ hàng',
     fullDescription: 'Cập nhật số lượng của một sản phẩm trong giỏ hàng dựa trên `productId` và `optionId`. Kiểm tra tồn kho và tính hợp lệ. Yêu cầu xác thực thông qua token JWT.',
     auth: {
@@ -201,7 +201,7 @@ const cartEndpoints = [
   },
   {
     method: 'DELETE',
-    path: '/api/cart/remove/:cartId/:productId/:optionId',
+    path: '/api/carts/remove/:cartId/:productId/:optionId',
     description: 'Xóa sản phẩm khỏi giỏ hàng',
     fullDescription: 'Xóa một mục khỏi giỏ hàng dựa trên `cartId`, `productId`, và `optionId`. Yêu cầu xác thực thông qua token JWT và kiểm tra quyền sở hữu giỏ hàng.',
     auth: {
@@ -233,7 +233,7 @@ const cartEndpoints = [
   },
   {
     method: 'DELETE',
-    path: '/api/cart/clear',
+    path: '/api/carts/clear',
     description: 'Xóa toàn bộ giỏ hàng',
     fullDescription: 'Xóa tất cả các mục trong giỏ hàng của người dùng dựa trên `userId`. Yêu cầu xác thực thông qua token JWT.',
     auth: {
@@ -260,7 +260,7 @@ const cartEndpoints = [
   },
   {
     method: 'POST',
-    path: '/api/cart/checkout',
+    path: '/api/carts/checkout',
     description: 'Thanh toán giỏ hàng',
     fullDescription: 'Tạo đơn hàng từ giỏ hàng của người dùng, kiểm tra tính hợp lệ của địa chỉ, số điện thoại, phương thức thanh toán, và mã giảm giá (nếu có). Cập nhật tồn kho, lưu địa chỉ tạm thời, xóa giỏ hàng sau khi thành công, và tạo mã thanh toán duy nhất (`paymentCode`). Yêu cầu xác thực thông qua token JWT.',
     auth: {
@@ -353,7 +353,7 @@ const cartEndpoints = [
   },
   {
     method: 'POST',
-    path: '/api/cart/update-price',
+    path: '/api/carts/update-price',
     description: 'Cập nhật giá giỏ hàng',
     fullDescription: 'Tính toán giá giỏ hàng của người dùng, bao gồm tổng phụ (subtotal), giảm giá (nếu áp dụng mã giảm giá), và tổng cộng. Yêu cầu xác thực thông qua token JWT.',
     auth: {

@@ -1,7 +1,7 @@
 const contactEndpoints = [
   {
     method: 'POST',
-    path: '/api/contact',
+    path: '/api/contacts',
     description: 'Gửi thông tin liên hệ mới',
     fullDescription:
       'Tạo một thông tin liên hệ mới với các thông tin được cung cấp. Không yêu cầu quyền admin, endpoint này công khai. Dữ liệu gửi qua `application/json`.',
@@ -72,7 +72,7 @@ const contactEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/contact',
+    path: '/api/contacts',
     description: 'Lấy tất cả thông tin liên hệ (chỉ admin)',
     fullDescription:
       'Trả về danh sách tất cả các thông tin liên hệ, sắp xếp theo thời gian tạo giảm dần. Yêu cầu quyền admin thông qua token JWT.',
@@ -109,7 +109,7 @@ const contactEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/contact/:id',
+    path: '/api/contacts/:id',
     description: 'Lấy thông tin liên hệ theo ID (chỉ admin)',
     fullDescription:
       'Trả về thông tin chi tiết của một liên hệ dựa trên ID. Yêu cầu quyền admin thông qua token JWT.',
@@ -150,7 +150,7 @@ const contactEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/contact/:id',
+    path: '/api/contacts/:id',
     description: 'Cập nhật trạng thái liên hệ (chỉ admin)',
     fullDescription:
       'Cập nhật trạng thái của một thông tin liên hệ dựa trên ID, chỉ cho phép chuyển từ "Chưa xử lý" sang "Đã xử lý". Yêu cầu quyền admin thông qua token JWT. Dữ liệu gửi qua `application/json`.',
@@ -210,7 +210,7 @@ const contactEndpoints = [
   },
   {
     method: 'DELETE',
-    path: '/api/contact/:id',
+    path: '/api/contacts/:id',
     description: 'Xóa thông tin liên hệ (chỉ admin)',
     fullDescription:
       'Xóa một thông tin liên hệ dựa trên ID. Yêu cầu quyền admin thông qua token JWT.',

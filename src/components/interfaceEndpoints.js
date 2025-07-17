@@ -1,7 +1,7 @@
 const interfaceEndpoints = [
   {
     method: 'PUT',
-    path: '/api/interface/logo',
+    path: '/api/interfaces/logo',
     description: 'Cập nhật logo cửa hàng',
     fullDescription:
       'Cập nhật logo cửa hàng bằng cách tải lên một file hình ảnh. Hình ảnh cũ sẽ bị xóa trong database. Yêu cầu quyền admin và token JWT hợp lệ. Hình ảnh được lưu trên Cloudinary.',
@@ -42,7 +42,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/interface/favicon',
+    path: '/api/interfaces/favicon',
     description: 'Cập nhật favicon',
     fullDescription:
       'Cập nhật favicon bằng cách tải lên một file hình ảnh. Hình ảnh cũ sẽ bị xóa trong database. Yêu cầu quyền admin và token JWT hợp lệ. Hình ảnh được lưu trên Cloudinary.',
@@ -83,7 +83,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/interface/banner1',
+    path: '/api/interfaces/banner1',
     description: 'Cập nhật banner1',
     fullDescription:
       'Cập nhật banner1 bằng cách tải lên tối đa 5 file hình ảnh. Hình ảnh cũ sẽ bị xóa trong database. Yêu cầu quyền admin và token JWT hợp lệ. Hình ảnh được lưu trên Cloudinary.',
@@ -127,7 +127,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/interface/banner2',
+    path: '/api/interfaces/banner2',
     description: 'Cập nhật banner2',
     fullDescription:
       'Cập nhật banner2 bằng cách tải lên một file hình ảnh. Hình ảnh cũ sẽ bị xóa trong database. Yêu cầu quyền admin và token JWT hợp lệ. Hình ảnh được lưu trên Cloudinary.',
@@ -168,7 +168,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/interface/decor',
+    path: '/api/interfaces/decor',
     description: 'Cập nhật hình ảnh decor',
     fullDescription:
       'Cập nhật hình ảnh decor bằng cách tải lên tối đa 2 file hình ảnh. Hình ảnh cũ sẽ bị xóa trong database. Yêu cầu quyền admin và token JWT hợp lệ. Hình ảnh được lưu trên Cloudinary.',
@@ -212,7 +212,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/interface/banner3',
+    path: '/api/interfaces/banner3',
     description: 'Cập nhật banner3',
     fullDescription:
       'Cập nhật banner3 bằng cách tải lên một file hình ảnh. Hình ảnh cũ sẽ bị xóa trong database. Yêu cầu quyền admin và token JWT hợp lệ. Hình ảnh được lưu trên Cloudinary.',
@@ -253,7 +253,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/interface/bannerAbout',
+    path: '/api/interfaces/bannerAbout',
     description: 'Cập nhật banner trang About',
     fullDescription:
       'Cập nhật banner cho trang About bằng cách tải lên một file hình ảnh. Hình ảnh cũ sẽ bị xóa trong database. Yêu cầu quyền admin và token JWT hợp lệ. Hình ảnh được lưu trên Cloudinary.',
@@ -294,7 +294,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'PUT',
-    path: '/api/interface/bannerNews',
+    path: '/api/interfaces/bannerNews',
     description: 'Cập nhật banner trang News',
     fullDescription:
       'Cập nhật banner cho trang News bằng cách tải lên một file hình ảnh. Hình ảnh cũ sẽ bị xóa trong database. Yêu cầu quyền admin và token JWT hợp lệ. Hình ảnh được lưu trên Cloudinary.',
@@ -335,7 +335,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/interface/logo',
+    path: '/api/interfaces/logo',
     description: 'Lấy đường dẫn logo cửa hàng',
     fullDescription:
       'Trả về danh sách đường dẫn của logo cửa hàng từ collection Interface. Endpoint này công khai, không yêu cầu xác thực.',
@@ -359,7 +359,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/interface/favicon',
+    path: '/api/interfaces/favicon',
     description: 'Lấy đường dẫn favicon',
     fullDescription:
       'Trả về danh sách đường dẫn của favicon từ collection Interface. Endpoint này công khai, không yêu cầu xác thực.',
@@ -383,7 +383,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/interface/banner1',
+    path: '/api/interfaces/banner1',
     description: 'Lấy đường dẫn banner1',
     fullDescription:
       'Trả về danh sách đường dẫn của banner1 từ collection Interface. Endpoint này công khai, không yêu cầu xác thực.',
@@ -410,7 +410,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/interface/banner2',
+    path: '/api/interfaces/banner2',
     description: 'Lấy đường dẫn banner2',
     fullDescription:
       'Trả về danh sách đường dẫn của banner2 từ collection Interface. Endpoint này công khai, không yêu cầu xác thực.',
@@ -434,7 +434,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/interface/decor',
+    path: '/api/interfaces/decor',
     description: 'Lấy đường dẫn hình ảnh decor',
     fullDescription:
       'Trả về danh sách đường dẫn của hình ảnh decor từ collection Interface. Endpoint này công khai, không yêu cầu xác thực.',
@@ -461,7 +461,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/interface/banner3',
+    path: '/api/interfaces/banner3',
     description: 'Lấy đường dẫn banner3',
     fullDescription:
       'Trả về danh sách đường dẫn của banner3 từ collection Interface. Endpoint này công khai, không yêu cầu xác thực.',
@@ -485,7 +485,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/interface/bannerAbout',
+    path: '/api/interfaces/bannerAbout',
     description: 'Lấy đường dẫn banner trang About',
     fullDescription:
       'Trả về danh sách đường dẫn của bannerAbout từ collection Interface. Endpoint này công khai, không yêu cầu xác thực.',
@@ -509,7 +509,7 @@ const interfaceEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/interface/bannerNews',
+    path: '/api/interfaces/bannerNews',
     description: 'Lấy đường dẫn banner trang News',
     fullDescription:
       'Trả về danh sách đường dẫn của bannerNews từ collection Interface. Endpoint này công khai, không yêu cầu xác thực.',

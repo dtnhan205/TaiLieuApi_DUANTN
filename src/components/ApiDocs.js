@@ -16,6 +16,7 @@ import Payment from './Payment';
 import Users from './Users';
 import MBBank from './MBBank';
 import Interface from './Interface';
+import Contact from './Contact';
 
 import './css/ApiDocs.css';
 
@@ -39,7 +40,8 @@ const ApiDocs = () => {
     { name: 'payment', label: 'Payment', component: Payment },
     { name: 'users', label: 'Users', component: Users },
     { name: 'mbBank', label: 'MB Bank', component: MBBank },
-    { name: 'interface', label: 'Interface', component: Interface }
+    { name: 'interface', label: 'Interface', component: Interface },
+    { name: 'contact', label: 'Contact', component: Contact },
   ];
 
   const handleRouteClick = (route) => {

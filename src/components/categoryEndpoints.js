@@ -4,7 +4,7 @@ const categoryEndpoints = [
     path: '/api/categories',
     description: 'Tạo danh mục mới',
     fullDescription:
-      'Tạo một danh mục mới với tên được cung cấp. Yêu cầu quyền admin thông qua token JWT. Tên danh mục phải duy nhất, và slug sẽ được tự động tạo từ tên.',
+      'Tạo một danh mục mới với tên được cung cấp. Yêu cầu quyền admin thông qua token JWT. Tên danh mục phải là một chuỗi không rỗng.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -15,7 +15,7 @@ const categoryEndpoints = [
       {
         name: 'name',
         type: 'string',
-        description: 'Tên danh mục, phải duy nhất',
+        description: 'Tên danh mục, phải là chuỗi không rỗng',
         required: true,
         in: 'body',
       },
@@ -32,14 +32,13 @@ const categoryEndpoints = [
         category: {
           _id: '60d5f8e9b1a2b4f8e8f9e2b4',
           name: 'Danh mục mới',
-          slug: 'danh-muc-moi',
           status: 'show',
-          createdAt: '2025-07-13T06:01:00.000Z',
+          createdAt: '2025-07-17T18:11:00.000Z',
         },
       },
     },
     errorResponses: [
-      { status: 400, description: 'Tên danh mục đã tồn tại hoặc dữ liệu không hợp lệ' },
+      { status: 400, description: 'Tên danh mục không hợp lệ hoặc dữ liệu không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
@@ -63,9 +62,8 @@ const categoryEndpoints = [
         {
           _id: '60d5f8e9b1a2b4f8e8f9e2b3',
           name: 'Danh mục 1',
-          slug: 'danh-muc-1',
           status: 'show',
-          createdAt: '2025-07-13T06:01:00.000Z',
+          createdAt: '2025-07-17T18:11:00.000Z',
         },
       ],
     },
@@ -76,7 +74,7 @@ const categoryEndpoints = [
   },
   {
     method: 'GET',
-    path: '/api/categories/:_id',
+    path: '/api/categories/:id',
     description: 'Lấy chi tiết danh mục',
     fullDescription:
       'Trả về thông tin chi tiết của một danh mục dựa trên ID. Không yêu cầu xác thực, có thể truy cập công khai.',
@@ -86,7 +84,7 @@ const categoryEndpoints = [
     },
     parameters: [
       {
-        name: '_id',
+        name: 'id',
         type: 'string',
         description: 'ObjectId của danh mục',
         required: true,
@@ -99,9 +97,8 @@ const categoryEndpoints = [
       example: {
         _id: '60d5f8e9b1a2b4f8e8f9e2b3',
         name: 'Danh mục 1',
-        slug: 'danh-muc-1',
         status: 'show',
-        createdAt: '2025-07-13T06:01:00.000Z',
+        createdAt: '2025-07-17T18:11:00.000Z',
       },
     },
     errorResponses: [
@@ -115,7 +112,7 @@ const categoryEndpoints = [
     path: '/api/categories/:id',
     description: 'Cập nhật danh mục',
     fullDescription:
-      'Cập nhật thông tin danh mục dựa trên ID, bao gồm tên danh mục. Yêu cầu quyền admin thông qua token JWT. Slug sẽ được tự động cập nhật nếu tên thay đổi.',
+      'Cập nhật thông tin danh mục dựa trên ID, bao gồm tên danh mục. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -132,7 +129,7 @@ const categoryEndpoints = [
       {
         name: 'name',
         type: 'string',
-        description: 'Tên danh mục mới, phải duy nhất',
+        description: 'Tên danh mục mới, phải là chuỗi không rỗng',
         required: true,
         in: 'body',
       },
@@ -149,14 +146,13 @@ const categoryEndpoints = [
         category: {
           _id: '60d5f8e9b1a2b4f8e8f9e2b3',
           name: 'Danh mục cập nhật',
-          slug: 'danh-muc-cap-nhat',
           status: 'show',
-          createdAt: '2025-07-13T06:01:00.000Z',
+          createdAt: '2025-07-17T18:11:00.000Z',
         },
       },
     },
     errorResponses: [
-      { status: 400, description: 'ID danh mục không hợp lệ hoặc tên danh mục đã tồn tại' },
+      { status: 400, description: 'ID danh mục không hợp lệ hoặc tên danh mục không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Không tìm thấy danh mục để cập nhật' },
@@ -201,7 +197,7 @@ const categoryEndpoints = [
     path: '/api/categories/:id/toggle-visibility',
     description: 'Chuyển đổi hiển thị danh mục',
     fullDescription:
-      'Chuyển đổi trạng thái hiển thị của danh mục giữa `show` và `hidden`. Đồng thời cập nhật trường `active` của các sản phẩm liên quan (`true` nếu `show`, `false` nếu `hidden`). Yêu cầu quyền admin thông qua token JWT.',
+      'Chuyển đổi trạng thái hiển thị của danh mục giữa `show` và `hidden`. Đồng thời cập nhật trường `active` của các sản phẩm liên quan (`true` nếu `show`, `false` nếu `hidden`). Không cho phép ẩn danh mục nếu còn sản phẩm có tồn kho. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -224,17 +220,56 @@ const categoryEndpoints = [
         category: {
           _id: '60d5f8e9b1a2b4f8e8f9e2b3',
           name: 'Danh mục 1',
-          slug: 'danh-muc-1',
           status: 'show',
-          createdAt: '2025-07-13T06:01:00.000Z',
+          createdAt: '2025-07-17T18:11:00.000Z',
         },
       },
+    },
+    errorResponses: [
+      { status: 400, description: 'ID danh mục không hợp lệ hoặc không thể ẩn danh mục do sản phẩm còn tồn kho' },
+      { status: 401, description: 'Không có token hoặc token không hợp lệ' },
+      { status: 403, description: 'Không có quyền admin' },
+      { status: 404, description: 'Không tìm thấy danh mục' },
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
+  },
+  {
+    method: 'GET',
+    path: '/api/categories/:id/products',
+    description: 'Lấy danh sách sản phẩm theo danh mục',
+    fullDescription:
+      'Trả về danh sách các sản phẩm thuộc danh mục được chỉ định bởi ID. Yêu cầu quyền admin thông qua token JWT.',
+    auth: {
+      required: true,
+      header: 'Authorization: Bearer <token>',
+      description: 'Token JWT của admin được yêu cầu trong header.',
+    },
+    parameters: [
+      {
+        name: 'id',
+        type: 'string',
+        description: 'ObjectId của danh mục',
+        required: true,
+        in: 'path',
+      },
+    ],
+    response: {
+      status: 200,
+      description: 'Danh sách sản phẩm theo danh mục',
+      example: [
+        {
+          _id: '60d5f8e9b1a2b4f8e8f9e2b5',
+          name: 'Sản phẩm 1',
+          id_category: '60d5f8e9b1a2b4f8e8f9e2b3',
+          active: true,
+          option: [{ stock: 10, price: 100 }],
+        },
+      ],
     },
     errorResponses: [
       { status: 400, description: 'ID danh mục không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
-      { status: 404, description: 'Không tìm thấy danh mục' },
       { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
     ],
   },

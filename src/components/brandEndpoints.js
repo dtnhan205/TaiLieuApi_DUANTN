@@ -4,7 +4,7 @@ const brandEndpoints = [
     path: '/api/brands',
     description: 'Lấy danh sách thương hiệu',
     fullDescription:
-      'Trả về danh sách tất cả các thương hiệu có trạng thái `show`. Không yêu cầu xác thực, có thể truy cập công khai.',
+      'Trả về danh sách tất cả các thương hiệu, bao gồm cả trạng thái `show` và `hidden`. Không yêu cầu xác thực, có thể truy cập công khai.',
     auth: {
       required: false,
       description: 'Không yêu cầu token. Endpoint này có thể truy cập công khai.',
@@ -19,14 +19,14 @@ const brandEndpoints = [
           name: 'Thương hiệu A',
           status: 'show',
           logoImg: 'images/brandA-logo.png',
-          createdAt: '2025-07-13T06:08:00.000Z',
+          createdAt: '2025-07-17T11:47:00.000Z',
         },
         {
           _id: '60d5f8e9b1a2b4f8e8f9e2b8',
           name: 'Thương hiệu B',
-          status: 'show',
+          status: 'hidden',
           logoImg: 'images/brandB-logo.png',
-          createdAt: '2025-07-13T06:08:00.000Z',
+          createdAt: '2025-07-17T11:47:00.000Z',
         },
       ],
     },
@@ -39,7 +39,8 @@ const brandEndpoints = [
     method: 'GET',
     path: '/api/brands/:id',
     description: 'Lấy chi tiết thương hiệu',
-    fullDescription: 'Trả về thông tin chi tiết của một thương hiệu dựa trên ID. Không yêu cầu xác thực.',
+    fullDescription:
+      'Trả về thông tin chi tiết của một thương hiệu dựa trên ID. Không yêu cầu xác thực, có thể truy cập công khai.',
     auth: {
       required: false,
       description: 'Không yêu cầu token. Endpoint này có thể truy cập công khai.',
@@ -61,7 +62,7 @@ const brandEndpoints = [
         name: 'Thương hiệu A',
         status: 'show',
         logoImg: 'images/brandA-logo.png',
-        createdAt: '2025-07-13T06:08:00.000Z',
+        createdAt: '2025-07-17T11:47:00.000Z',
       },
     },
     errorResponses: [
@@ -79,7 +80,8 @@ const brandEndpoints = [
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
+      description:
+        'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
       {
@@ -109,8 +111,8 @@ const brandEndpoints = [
       body: {
         name: 'Thương hiệu mới',
         status: 'show',
-        logoImg: 'newbrand-logo.png',
       },
+      files: ['newbrand-logo.png'],
     },
     response: {
       status: 201,
@@ -122,7 +124,7 @@ const brandEndpoints = [
           name: 'Thương hiệu mới',
           status: 'show',
           logoImg: 'images/newbrand-logo.png',
-          createdAt: '2025-07-13T06:08:00.000Z',
+          createdAt: '2025-07-17T11:47:00.000Z',
         },
       },
     },
@@ -144,7 +146,8 @@ const brandEndpoints = [
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
+      description:
+        'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
       {
@@ -181,8 +184,8 @@ const brandEndpoints = [
       body: {
         name: 'Thương hiệu cập nhật',
         status: 'show',
-        logoImg: 'updated-logo.png',
       },
+      files: ['updated-logo.png'],
     },
     response: {
       status: 200,
@@ -194,12 +197,13 @@ const brandEndpoints = [
           name: 'Thương hiệu cập nhật',
           status: 'show',
           logoImg: 'images/updated-logo.png',
-          createdAt: '2025-07-13T06:08:00.000Z',
+          createdAt: '2025-07-17T11:47:00.000Z',
         },
       },
     },
     errorResponses: [
       { status: 400, description: 'Tên thương hiệu đã tồn tại hoặc dữ liệu không hợp lệ' },
+      { status: 400, description: 'ID thương hiệu không hợp lệ' },
       { status: 400, description: 'Chỉ hỗ trợ file ảnh (jpg, jpeg, png, gif, webp, svg)' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
@@ -211,11 +215,13 @@ const brandEndpoints = [
     method: 'DELETE',
     path: '/api/brands/:id',
     description: 'Xóa thương hiệu',
-    fullDescription: 'Xóa một thương hiệu dựa trên ID. Yêu cầu quyền admin thông qua token JWT.',
+    fullDescription:
+      'Xóa một thương hiệu dựa trên ID. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
+      description:
+        'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
       {
@@ -246,11 +252,12 @@ const brandEndpoints = [
     path: '/api/brands/:id/toggle-visibility',
     description: 'Chuyển đổi hiển thị thương hiệu',
     fullDescription:
-      'Chuyển đổi trạng thái hiển thị của thương hiệu giữa `show` và `hidden`. Yêu cầu quyền admin thông qua token JWT.',
+      'Chuyển đổi trạng thái hiển thị của thương hiệu giữa `show` và `hidden`. Khi chuyển sang `hidden`, kiểm tra sản phẩm liên quan có tồn kho và bao gồm cảnh báo nếu có. Cập nhật trạng thái `active` của sản phẩm liên quan (`true` nếu `show`, `false` nếu `hidden`). Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
+      description:
+        'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
       {
@@ -260,23 +267,38 @@ const brandEndpoints = [
         required: true,
         in: 'path',
       },
+      {
+        name: 'status',
+        type: 'string',
+        description: 'Trạng thái mới của thương hiệu (`show` hoặc `hidden`)',
+        required: true,
+        in: 'body',
+      },
     ],
+    requestExample: {
+      headers: { Authorization: 'Bearer <token>' },
+      body: {
+        status: 'hidden',
+      },
+    },
     response: {
       status: 200,
       description: 'Chuyển đổi trạng thái hiển thị thành công',
       example: {
-        message: 'Thương hiệu đã được hiển thị',
+        message: 'Thương hiệu đã được ẩn',
         brand: {
           _id: '60d5f8e9b1a2b4f8e8f9e2b7',
           name: 'Thương hiệu A',
-          status: 'show',
+          status: 'hidden',
           logoImg: 'images/brandA-logo.png',
-          createdAt: '2025-07-13T06:08:00.000Z',
+          createdAt: '2025-07-17T11:47:00.000Z',
         },
+        warning: 'Cảnh báo: Thương hiệu được ẩn mặc dù vẫn còn sản phẩm có tồn kho!',
       },
     },
     errorResponses: [
       { status: 400, description: 'ID thương hiệu không hợp lệ' },
+      { status: 400, description: 'Trạng thái không hợp lệ, phải là "show" hoặc "hidden"' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Không tìm thấy thương hiệu' },

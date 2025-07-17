@@ -3,10 +3,10 @@ const newsEndpoints = [
     method: 'GET',
     path: '/api/news',
     description: 'Lấy danh sách tất cả tin tức',
-    fullDescription: 'Trả về danh sách tất cả tin tức, sắp xếp theo ngày xuất bản giảm dần (`publishedAt`). Không yêu cầu xác thực, có thể truy cập công khai.',
+    fullDescription: 'Trả về danh sách tất cả tin tức cả show và hidden, sắp xếp theo ngày xuất bản (`publishedAt`) giảm dần. Không yêu cầu xác thực, có thể truy cập công khai.',
     auth: {
       required: false,
-      description: 'Không yêu cầu token. Endpoint này có thể truy cập công khai.'
+      description: 'Không yêu cầu token. Endpoint này có thể truy cập công khai.',
     },
     parameters: [],
     response: {
@@ -17,34 +17,40 @@ const newsEndpoints = [
           _id: '60d5f8e9b1a2b4f8e8f9e2c6',
           title: 'Tin tức mới nhất về Pure-Botanica',
           slug: 'tin-tuc-moi-nhat-ve-pure-botanica',
-          thumbnailUrl: '/images/thumbnail1.jpg',
+          thumbnailUrl: 'https://res.cloudinary.com/your_cloud_name/image/upload/thumbnail1.jpg',
           thumbnailCaption: 'Hình ảnh tin tức',
-          publishedAt: '2025-07-09T00:00:00Z',
+          publishedAt: '2025-07-17T12:06:00.000Z',
           views: 100,
           status: 'show',
-          content: '<p>Nội dung chi tiết về tin tức...</p><img src="/images/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
-          createdAt: '2025-07-09T00:00:00Z',
-          updatedAt: '2025-07-09T00:00:00Z'
-        }
-      ]
+          content: '<p>Nội dung chi tiết về tin tức...</p><img src="https://res.cloudinary.com/your_cloud_name/image/upload/news_content/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
+          createdAt: '2025-07-17T12:06:00.000Z',
+          updatedAt: '2025-07-17T12:06:00.000Z',
+        },
+      ],
     },
     errorResponses: [
       { status: 404, description: 'Không tìm thấy tin tức nào' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'GET',
     path: '/api/news/:identifier',
     description: 'Lấy chi tiết tin tức',
-    fullDescription: 'Lấy chi tiết một tin tức dựa trên ID hoặc slug. Nếu không có header Authorization (người dùng thường), lượt xem (`views`) sẽ tăng lên. Admin truy cập không tăng lượt xem. Không yêu cầu xác thực cho người dùng thường.',
+    fullDescription: 'Lấy chi tiết một tin tức dựa trên ID hoặc slug. Nếu không có header Authorization (người dùng thường), lượt xem (`views`) sẽ tăng. Admin truy cập (với token) không tăng lượt xem. Không yêu cầu xác thực cho người dùng thường.',
     auth: {
       required: false,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT tùy chọn. Nếu có token admin, lượt xem không tăng. Nếu không có token, lượt xem tăng lên.'
+      description: 'Token JWT tùy chọn. Nếu có token admin, lượt xem không tăng. Nếu không có token, lượt xem tăng lên.',
     },
     parameters: [
-      { name: 'identifier', type: 'string', description: 'ObjectId hoặc slug của tin tức', required: true }
+      {
+        name: 'identifier',
+        type: 'string',
+        description: 'ObjectId hoặc slug của tin tức',
+        required: true,
+        in: 'path',
+      },
     ],
     response: {
       status: 200,
@@ -53,20 +59,20 @@ const newsEndpoints = [
         _id: '60d5f8e9b1a2b4f8e8f9e2c6',
         title: 'Tin tức mới nhất về Pure-Botanica',
         slug: 'tin-tuc-moi-nhat-ve-pure-botanica',
-        thumbnailUrl: '/images/thumbnail1.jpg',
+        thumbnailUrl: 'https://res.cloudinary.com/your_cloud_name/image/upload/thumbnail1.jpg',
         thumbnailCaption: 'Hình ảnh tin tức',
-        publishedAt: '2025-07-09T00:00:00Z',
+        publishedAt: '2025-07-17T12:06:00.000Z',
         views: 101,
         status: 'show',
-        content: '<p>Nội dung chi tiết về tin tức...</p><img src="/images/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
-        createdAt: '2025-07-09T00:00:00Z',
-        updatedAt: '2025-07-09T00:00:00Z'
-      }
+        content: '<p>Nội dung chi tiết về tin tức...</p><img src="https://res.cloudinary.com/your_cloud_name/image/upload/news_content/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
+        createdAt: '2025-07-17T12:06:00.000Z',
+        updatedAt: '2025-07-17T12:06:00.000Z',
+      },
     },
     errorResponses: [
       { status: 404, description: 'Không tìm thấy tin tức' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'GET',
@@ -75,10 +81,16 @@ const newsEndpoints = [
     fullDescription: 'Trả về danh sách tin tức có trạng thái `show`, sắp xếp theo lượt xem (`views`) giảm dần. Hỗ trợ query `limit` để giới hạn số lượng tin tức. Không yêu cầu xác thực, có thể truy cập công khai.',
     auth: {
       required: false,
-      description: 'Không yêu cầu token. Endpoint này có thể truy cập công khai.'
+      description: 'Không yêu cầu token. Endpoint này có thể truy cập công khai.',
     },
     parameters: [
-      { name: 'limit', type: 'number', description: 'Số lượng tin tức tối đa trả về (mặc định: tất cả)', required: false }
+      {
+        name: 'limit',
+        type: 'number',
+        description: 'Số lượng tin tức tối đa trả về (mặc định: tất cả)',
+        required: false,
+        in: 'query',
+      },
     ],
     response: {
       status: 200,
@@ -90,57 +102,103 @@ const newsEndpoints = [
             _id: '60d5f8e9b1a2b4f8e8f9e2c6',
             title: 'Tin tức mới nhất về Pure-Botanica',
             slug: 'tin-tuc-moi-nhat-ve-pure-botanica',
-            thumbnailUrl: '/images/thumbnail1.jpg',
+            thumbnailUrl: 'https://res.cloudinary.com/your_cloud_name/image/upload/thumbnail1.jpg',
             thumbnailCaption: 'Hình ảnh tin tức',
-            publishedAt: '2025-07-09T00:00:00Z',
+            publishedAt: '2025-07-17T12:06:00.000Z',
             views: 100,
             status: 'show',
-            content: '<p>Nội dung chi tiết về tin tức...</p><img src="/images/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
-            createdAt: '2025-07-09T00:00:00Z',
-            updatedAt: '2025-07-09T00:00:00Z'
-          }
-        ]
-      }
+            content: '<p>Nội dung chi tiết về tin tức...</p><img src="https://res.cloudinary.com/your_cloud_name/image/upload/news_content/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
+            createdAt: '2025-07-17T12:06:00.000Z',
+            updatedAt: '2025-07-17T12:06:00.000Z',
+          },
+        ],
+      },
     },
     errorResponses: [
       { status: 404, description: 'Không tìm thấy bài đăng nào' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'POST',
     path: '/api/news',
     description: 'Tạo tin tức mới',
-    fullDescription: 'Tạo một tin tức mới với tiêu đề, nội dung (HTML có thể chứa hình ảnh Data URL), và thumbnail bắt buộc. Hình ảnh Data URL trong `content` (ví dụ: `<img src="data:image/jpeg;base64,...">`) sẽ được lưu vào `public/images` và cập nhật `src` thành `/images/filename`. Slug được tự động tạo nếu không cung cấp. Yêu cầu quyền admin thông qua token JWT.',
+    fullDescription: 'Tạo một tin tức mới với tiêu đề, nội dung (HTML có thể chứa hình ảnh Data URL), và thumbnail bắt buộc. Hình ảnh Data URL trong `content` (e.g., `<img src="data:image/jpeg;base64,...">`) được tải lên Cloudinary và cập nhật `src` thành URL Cloudinary. Thumbnail được tải lên Cloudinary. Slug được tự động tạo nếu không cung cấp. Yêu cầu quyền admin thông qua token JWT. Dữ liệu gửi qua `multipart/form-data`.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'title', type: 'string', description: 'Tiêu đề tin tức', required: true },
-      { name: 'content', type: 'string', description: 'Nội dung tin tức (HTML, hỗ trợ `<img>` với Data URLs `data:image/jpeg;base64,...` hoặc `data:image/png;base64,...`)', required: true },
-      { name: 'thumbnail', type: 'file', description: 'File hình ảnh thumbnail (jpg, png, gif, webp)', required: true },
-      { name: 'slug', type: 'string', description: 'Slug của tin tức (tùy chọn, tự động tạo nếu không cung cấp)', required: false },
-      { name: 'thumbnailCaption', type: 'string', description: 'Chú thích cho thumbnail (tùy chọn)', required: false },
-      { name: 'publishedAt', type: 'string', description: 'Ngày xuất bản (định dạng ISO, mặc định: hiện tại)', required: false },
-      { name: 'views', type: 'number', description: 'Số lượt xem ban đầu (mặc định: 0)', required: false },
-      { name: 'status', type: 'string', description: 'Trạng thái tin tức (`show` hoặc `hidden`, mặc định: `show`)', required: false }
+      {
+        name: 'title',
+        type: 'string',
+        description: 'Tiêu đề tin tức',
+        required: true,
+        in: 'body',
+      },
+      {
+        name: 'content',
+        type: 'string',
+        description: 'Nội dung tin tức (HTML, hỗ trợ `<img>` với Data URLs `data:image/jpeg;base64,...` hoặc `data:image/png;base64,...`)',
+        required: true,
+        in: 'body',
+      },
+      {
+        name: 'thumbnail',
+        type: 'file',
+        description: 'File hình ảnh thumbnail (jpg, jpeg, png, gif, webp, svg; tối đa 20MB)',
+        required: true,
+        in: 'formData',
+      },
+      {
+        name: 'slug',
+        type: 'string',
+        description: 'Slug của tin tức (tùy chọn, tự động tạo nếu không cung cấp)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'thumbnailCaption',
+        type: 'string',
+        description: 'Chú thích cho thumbnail (tùy chọn)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'publishedAt',
+        type: 'string',
+        description: 'Ngày xuất bản (định dạng ISO, mặc định: hiện tại)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'views',
+        type: 'number',
+        description: 'Số lượt xem ban đầu (mặc định: 0)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'status',
+        type: 'string',
+        description: 'Trạng thái tin tức (`show` hoặc `hidden`, mặc định: `show`)',
+        required: false,
+        in: 'body',
+      },
     ],
     requestExample: {
-      headers: { 'Authorization': 'Bearer <token>' },
+      headers: { Authorization: 'Bearer <token>', 'Content-Type': 'multipart/form-data' },
       body: {
         title: 'Tin tức mới nhất về Pure-Botanica',
         content: '<p>Nội dung chi tiết về tin tức...</p><img src="data:image/jpeg;base64,/9j/4AAQSkZ..." alt="skincare">',
         slug: 'tin-tuc-moi-nhat',
         thumbnailCaption: 'Hình ảnh tin tức',
-        publishedAt: '2025-07-09T00:00:00Z',
+        publishedAt: '2025-07-17T12:06:00.000Z',
         views: 0,
-        status: 'show'
+        status: 'show',
       },
-      files: {
-        thumbnail: 'thumbnail1.jpg'
-      }
+      files: ['thumbnail1.jpg'],
     },
     response: {
       status: 201,
@@ -151,61 +209,114 @@ const newsEndpoints = [
           _id: '60d5f8e9b1a2b4f8e8f9e2c6',
           title: 'Tin tức mới nhất về Pure-Botanica',
           slug: 'tin-tuc-moi-nhat',
-          thumbnailUrl: '/images/thumbnail1.jpg',
+          thumbnailUrl: 'https://res.cloudinary.com/your_cloud_name/image/upload/thumbnail1.jpg',
           thumbnailCaption: 'Hình ảnh tin tức',
-          publishedAt: '2025-07-09T00:00:00Z',
+          publishedAt: '2025-07-17T12:06:00.000Z',
           views: 0,
           status: 'show',
-          content: '<p>Nội dung chi tiết về tin tức...</p><img src="/images/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
-          createdAt: '2025-07-09T00:00:00Z',
-          updatedAt: '2025-07-09T00:00:00Z'
-        }
-      }
+          content: '<p>Nội dung chi tiết về tin tức...</p><img src="https://res.cloudinary.com/your_cloud_name/image/upload/news_content/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
+          createdAt: '2025-07-17T12:06:00.000Z',
+          updatedAt: '2025-07-17T12:06:00.000Z',
+        },
+      },
     },
     errorResponses: [
       { status: 400, description: 'Thiếu các trường bắt buộc: title, content, hoặc thumbnail' },
-      { status: 400, description: 'Slug đã tồn tại' },
+      { status: 400, description: 'Trùng lặp slug' },
       { status: 400, description: 'Nội dung HTML không hợp lệ' },
       { status: 400, description: 'Data URL không hợp lệ hoặc loại hình ảnh không được hỗ trợ (chỉ hỗ trợ jpeg, png, gif, webp)' },
-      { status: 400, description: 'Kích thước hình ảnh Data URL vượt quá 20MB' },
+      { status: 400, description: 'Chỉ hỗ trợ file ảnh (jpg, jpeg, png, gif, webp, svg) cho thumbnail' },
+      { status: 400, description: 'Kích thước hình ảnh vượt quá 20MB' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database hoặc Cloudinary' },
+    ],
   },
   {
     method: 'PUT',
     path: '/api/news/:identifier',
     description: 'Cập nhật tin tức',
-    fullDescription: 'Cập nhật thông tin tin tức dựa trên ID hoặc slug. Hỗ trợ cập nhật thumbnail và nội dung (HTML có thể chứa hình ảnh Data URL). Hình ảnh Data URL trong `content` sẽ được lưu vào `public/images` và cập nhật `src` thành `/images/filename`. Thumbnail cũ sẽ được xóa nếu gửi thumbnail mới. Slug được tự động tạo nếu cung cấp giá trị mới. Yêu cầu quyền admin thông qua token JWT.',
+    fullDescription: 'Cập nhật thông tin tin tức dựa trên ID hoặc slug. Hỗ trợ cập nhật thumbnail và nội dung (HTML có thể chứa hình ảnh Data URL). Hình ảnh Data URL trong `content` được tải lên Cloudinary và cập nhật `src` thành URL Cloudinary. Thumbnail được tải lên Cloudinary nếu cung cấp. Slug được tự động tạo nếu cung cấp giá trị mới. Yêu cầu quyền admin thông qua token JWT. Dữ liệu gửi qua `multipart/form-data`.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'identifier', type: 'string', description: 'ObjectId hoặc slug của tin tức', required: true },
-      { name: 'title', type: 'string', description: 'Tiêu đề tin tức mới', required: false },
-      { name: 'content', type: 'string', description: 'Nội dung tin tức mới (HTML, hỗ trợ `<img>` với Data URLs `data:image/jpeg;base64,...` hoặc `data:image/png;base64,...`)', required: false },
-      { name: 'thumbnail', type: 'file', description: 'File hình ảnh thumbnail mới (jpg, png, gif, webp)', required: false },
-      { name: 'slug', type: 'string', description: 'Slug mới (tùy chọn, tự động tạo nếu cung cấp)', required: false },
-      { name: 'thumbnailCaption', type: 'string', description: 'Chú thích mới cho thumbnail', required: false },
-      { name: 'publishedAt', type: 'string', description: 'Ngày xuất bản mới (định dạng ISO)', required: false },
-      { name: 'views', type: 'number', description: 'Số lượt xem mới', required: false },
-      { name: 'status', type: 'string', description: 'Trạng thái mới (`show` hoặc `hidden`)', required: false }
+      {
+        name: 'identifier',
+        type: 'string',
+        description: 'ObjectId hoặc slug của tin tức',
+        required: true,
+        in: 'path',
+      },
+      {
+        name: 'title',
+        type: 'string',
+        description: 'Tiêu đề tin tức mới',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'content',
+        type: 'string',
+        description: 'Nội dung tin tức mới (HTML, hỗ trợ `<img>` với Data URLs `data:image/jpeg;base64,...` hoặc `data:image/png;base64,...`)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'thumbnail',
+        type: 'file',
+        description: 'File hình ảnh thumbnail mới (jpg, jpeg, png, gif, webp, svg; tối đa 20MB)',
+        required: false,
+        in: 'formData',
+      },
+      {
+        name: 'slug',
+        type: 'string',
+        description: 'Slug mới (tùy chọn, tự động tạo nếu cung cấp)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'thumbnailCaption',
+        type: 'string',
+        description: 'Chú thích mới cho thumbnail',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'publishedAt',
+        type: 'string',
+        description: 'Ngày xuất bản mới (định dạng ISO)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'views',
+        type: 'number',
+        description: 'Số lượt xem mới',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'status',
+        type: 'string',
+        description: 'Trạng thái mới (`show` hoặc `hidden`)',
+        required: false,
+        in: 'body',
+      },
     ],
     requestExample: {
-      headers: { 'Authorization': 'Bearer <token>' },
+      headers: { Authorization: 'Bearer <token>', 'Content-Type': 'multipart/form-data' },
       body: {
         title: 'Tin tức cập nhật về Pure-Botanica',
         content: '<p>Nội dung cập nhật...</p><img src="data:image/jpeg;base64,/9j/4AAQSkZ..." alt="skincare">',
         slug: 'tin-tuc-cap-nhat',
         thumbnailCaption: 'Hình ảnh mới',
-        status: 'hidden'
+        status: 'hidden',
       },
-      files: {
-        thumbnail: 'thumbnail2.jpg'
-      }
+      files: ['thumbnail2.jpg'],
     },
     response: {
       status: 200,
@@ -216,54 +327,61 @@ const newsEndpoints = [
           _id: '60d5f8e9b1a2b4f8e8f9e2c6',
           title: 'Tin tức cập nhật về Pure-Botanica',
           slug: 'tin-tuc-cap-nhat',
-          thumbnailUrl: '/images/thumbnail2.jpg',
+          thumbnailUrl: 'https://res.cloudinary.com/your_cloud_name/image/upload/thumbnail2.jpg',
           thumbnailCaption: 'Hình ảnh mới',
-          publishedAt: '2025-07-09T00:00:00Z',
+          publishedAt: '2025-07-17T12:06:00.000Z',
           views: 100,
           status: 'hidden',
-          content: '<p>Nội dung cập nhật...</p><img src="/images/123e4567-e89b-12d3-a456-426614174001.jpg" alt="skincare">',
-          createdAt: '2025-07-09T00:00:00Z',
-          updatedAt: '2025-07-09T01:00:00Z'
-        }
-      }
+          content: '<p>Nội dung cập nhật...</p><img src="https://res.cloudinary.com/your_cloud_name/image/upload/news_content/123e4567-e89b-12d3-a456-426614174001.jpg" alt="skincare">',
+          createdAt: '2025-07-17T12:06:00.000Z',
+          updatedAt: '2025-07-17T12:06:00.000Z',
+        },
+      },
     },
     errorResponses: [
-      { status: 400, description: 'Slug đã tồn tại' },
+      { status: 400, description: 'Trùng lặp slug' },
       { status: 400, description: 'Nội dung HTML không hợp lệ' },
       { status: 400, description: 'Data URL không hợp lệ hoặc loại hình ảnh không được hỗ trợ (chỉ hỗ trợ jpeg, png, gif, webp)' },
-      { status: 400, description: 'Kích thước hình ảnh Data URL vượt quá 20MB' },
+      { status: 400, description: 'Chỉ hỗ trợ file ảnh (jpg, jpeg, png, gif, webp, svg) cho thumbnail' },
+      { status: 400, description: 'Kích thước hình ảnh vượt quá 20MB' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Không tìm thấy tin tức để cập nhật' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database hoặc Cloudinary' },
+    ],
   },
   {
     method: 'DELETE',
     path: '/api/news/:identifier',
     description: 'Xóa tin tức',
-    fullDescription: 'Xóa một tin tức dựa trên ID hoặc slug, đồng thời xóa thumbnail và các hình ảnh trong content (nếu có `src` bắt đầu bằng `/images/`). Yêu cầu quyền admin thông qua token JWT.',
+    fullDescription: 'Xóa một tin tức dựa trên ID hoặc slug. Hình ảnh thumbnail và nội dung trên Cloudinary không được xóa tự động (quản lý bởi Cloudinary garbage collection). Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'identifier', type: 'string', description: 'ObjectId hoặc slug của tin tức', required: true }
+      {
+        name: 'identifier',
+        type: 'string',
+        description: 'ObjectId hoặc slug của tin tức',
+        required: true,
+        in: 'path',
+      },
     ],
     response: {
       status: 200,
       description: 'Xóa tin tức thành công',
       example: {
-        message: 'Xóa tin tức thành công'
-      }
+        message: 'Xóa tin tức thành công',
+      },
     },
     errorResponses: [
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Không tìm thấy tin tức để xóa' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'PUT',
@@ -273,10 +391,16 @@ const newsEndpoints = [
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'identifier', type: 'string', description: 'ObjectId hoặc slug của tin tức', required: true }
+      {
+        name: 'identifier',
+        type: 'string',
+        description: 'ObjectId hoặc slug của tin tức',
+        required: true,
+        in: 'path',
+      },
     ],
     response: {
       status: 200,
@@ -287,24 +411,24 @@ const newsEndpoints = [
           _id: '60d5f8e9b1a2b4f8e8f9e2c6',
           title: 'Tin tức mới nhất về Pure-Botanica',
           slug: 'tin-tuc-moi-nhat',
-          thumbnailUrl: '/images/thumbnail1.jpg',
+          thumbnailUrl: 'https://res.cloudinary.com/your_cloud_name/image/upload/thumbnail1.jpg',
           thumbnailCaption: 'Hình ảnh tin tức',
-          publishedAt: '2025-07-09T00:00:00Z',
+          publishedAt: '2025-07-17T12:06:00.000Z',
           views: 100,
           status: 'hidden',
-          content: '<p>Nội dung chi tiết về tin tức...</p><img src="/images/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
-          createdAt: '2025-07-09T00:00:00Z',
-          updatedAt: '2025-07-09T01:00:00Z'
-        }
-      }
+          content: '<p>Nội dung chi tiết về tin tức...</p><img src="https://res.cloudinary.com/your_cloud_name/image/upload/news_content/123e4567-e89b-12d3-a456-426614174000.jpg" alt="skincare">',
+          createdAt: '2025-07-17T12:06:00.000Z',
+          updatedAt: '2025-07-17T12:06:00.000Z',
+        },
+      },
     },
     errorResponses: [
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Không tìm thấy tin tức' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
-  }
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
+  },
 ];
 
 export default newsEndpoints;

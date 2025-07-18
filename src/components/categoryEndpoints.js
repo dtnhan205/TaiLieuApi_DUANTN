@@ -4,7 +4,7 @@ const categoryEndpoints = [
     path: '/api/categories',
     description: 'Tạo danh mục mới',
     fullDescription:
-      'Tạo một danh mục mới với tên được cung cấp. Yêu cầu quyền admin thông qua token JWT. Tên danh mục phải là một chuỗi không rỗng.',
+      'Tạo một danh mục mới với tên được cung cấp. Danh mục được tạo mặc định có trạng thái `show`. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -49,7 +49,7 @@ const categoryEndpoints = [
     path: '/api/categories',
     description: 'Lấy danh sách danh mục',
     fullDescription:
-      'Trả về danh sách tất cả các danh mục có trong hệ thống. Không yêu cầu xác thực, có thể truy cập công khai.',
+      'Trả về danh sách tất cả các danh mục có trong hệ thống, bao gồm cả trạng thái `show` và `hidden`. Không yêu cầu xác thực, có thể truy cập công khai.',
     auth: {
       required: false,
       description: 'Không yêu cầu token. Endpoint này có thể truy cập công khai.',
@@ -112,7 +112,7 @@ const categoryEndpoints = [
     path: '/api/categories/:id',
     description: 'Cập nhật danh mục',
     fullDescription:
-      'Cập nhật thông tin danh mục dựa trên ID, bao gồm tên danh mục. Yêu cầu quyền admin thông qua token JWT.',
+      'Cập nhật tên danh mục dựa trên ID. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -197,7 +197,7 @@ const categoryEndpoints = [
     path: '/api/categories/:id/toggle-visibility',
     description: 'Chuyển đổi hiển thị danh mục',
     fullDescription:
-      'Chuyển đổi trạng thái hiển thị của danh mục giữa `show` và `hidden`. Đồng thời cập nhật trường `active` của các sản phẩm liên quan (`true` nếu `show`, `false` nếu `hidden`). Không cho phép ẩn danh mục nếu còn sản phẩm có tồn kho. Yêu cầu quyền admin thông qua token JWT.',
+      'Chuyển đổi trạng thái hiển thị của danh mục giữa `show` và `hidden`. Khi chuyển sang `hidden`, kiểm tra sản phẩm liên quan có tồn kho và trả về lỗi nếu có; nếu không, các sản phẩm liên quan được đặt `active: false`. Khi chuyển sang `show`, sản phẩm chỉ được đặt `active: true` nếu thương hiệu tương ứng có trạng thái `show`; nếu không, sản phẩm được đặt `active: false`. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -211,22 +211,35 @@ const categoryEndpoints = [
         required: true,
         in: 'path',
       },
+      {
+        name: 'status',
+        type: 'string',
+        description: 'Trạng thái mới của danh mục (`show` hoặc `hidden`)',
+        required: true,
+        in: 'body',
+      },
     ],
+    requestExample: {
+      headers: { Authorization: 'Bearer <token>' },
+      body: { status: 'hidden' },
+    },
     response: {
       status: 200,
       description: 'Chuyển đổi trạng thái hiển thị thành công',
       example: {
-        message: 'Danh mục đã được hiển thị',
+        message: 'Danh mục đã được ẩn',
         category: {
           _id: '60d5f8e9b1a2b4f8e8f9e2b3',
           name: 'Danh mục 1',
-          status: 'show',
+          status: 'hidden',
           createdAt: '2025-07-17T18:11:00.000Z',
         },
       },
     },
     errorResponses: [
-      { status: 400, description: 'ID danh mục không hợp lệ hoặc không thể ẩn danh mục do sản phẩm còn tồn kho' },
+      { status: 400, description: 'ID danh mục không hợp lệ' },
+      { status: 400, description: 'Trạng thái không hợp lệ, phải là "show" hoặc "hidden"' },
+      { status: 400, description: 'Không thể ẩn danh mục do sản phẩm còn tồn kho' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Không tìm thấy danh mục' },
@@ -261,6 +274,7 @@ const categoryEndpoints = [
           _id: '60d5f8e9b1a2b4f8e8f9e2b5',
           name: 'Sản phẩm 1',
           id_category: '60d5f8e9b1a2b4f8e8f9e2b3',
+          id_brand: '60d5f8e9b1a2b4f8e8f9e2b7',
           active: true,
           option: [{ stock: 10, price: 100 }],
         },

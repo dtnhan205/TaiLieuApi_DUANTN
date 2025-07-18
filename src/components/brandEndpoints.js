@@ -76,7 +76,7 @@ const brandEndpoints = [
     path: '/api/brands',
     description: 'Tạo thương hiệu mới',
     fullDescription:
-      'Tạo một thương hiệu mới với tên, trạng thái tùy chọn (mặc định là `show`), và hình ảnh logo (bắt buộc). Yêu cầu quyền admin thông qua token JWT. Dữ liệu được gửi dưới dạng `multipart/form-data`.',
+      'Tạo một thương hiệu mới với tên, trạng thái tùy chọn (mặc định là `show`), và hình ảnh logo (bắt buộc). Nếu trạng thái là `hidden`, các sản phẩm liên quan sẽ được đặt `active: false`, với cảnh báo nếu có sản phẩm còn tồn kho. Yêu cầu quyền admin thông qua token JWT. Dữ liệu được gửi dưới dạng `multipart/form-data`.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -126,6 +126,7 @@ const brandEndpoints = [
           logoImg: 'images/newbrand-logo.png',
           createdAt: '2025-07-17T11:47:00.000Z',
         },
+        warning: 'Cảnh báo: Thương hiệu được ẩn mặc dù vẫn còn sản phẩm có tồn kho!' // Chỉ xuất hiện nếu status là hidden và có sản phẩm còn tồn kho
       },
     },
     errorResponses: [
@@ -142,7 +143,7 @@ const brandEndpoints = [
     path: '/api/brands/:id',
     description: 'Cập nhật thương hiệu',
     fullDescription:
-      'Cập nhật thông tin thương hiệu (tên, trạng thái, hoặc hình ảnh logo) dựa trên ID. Hình ảnh logo là tùy chọn. Yêu cầu quyền admin thông qua token JWT. Dữ liệu được gửi dưới dạng `multipart/form-data`.',
+      'Cập nhật thông tin thương hiệu (tên, trạng thái, hoặc hình ảnh logo) dựa trên ID. Hình ảnh logo là tùy chọn. Nếu trạng thái được cập nhật thành `hidden`, các sản phẩm liên quan sẽ được đặt `active: false`, với cảnh báo nếu có sản phẩm còn tồn kho. Nếu trạng thái là `show`, sản phẩm chỉ được đặt `active: true` nếu danh mục tương ứng có trạng thái `show`; nếu không, sản phẩm được đặt `active: false`. Yêu cầu quyền admin thông qua token JWT. Dữ liệu được gửi dưới dạng `multipart/form-data`.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -183,7 +184,7 @@ const brandEndpoints = [
       headers: { Authorization: 'Bearer <token>', 'Content-Type': 'multipart/form-data' },
       body: {
         name: 'Thương hiệu cập nhật',
-        status: 'show',
+        status: 'hidden',
       },
       files: ['updated-logo.png'],
     },
@@ -195,10 +196,11 @@ const brandEndpoints = [
         brand: {
           _id: '60d5f8e9b1a2b4f8e8f9e2b7',
           name: 'Thương hiệu cập nhật',
-          status: 'show',
+          status: 'hidden',
           logoImg: 'images/updated-logo.png',
           createdAt: '2025-07-17T11:47:00.000Z',
         },
+        warning: 'Cảnh báo: Thương hiệu được ẩn mặc dù vẫn còn sản phẩm có tồn kho!' // Chỉ xuất hiện nếu status là hidden và có sản phẩm còn tồn kho
       },
     },
     errorResponses: [
@@ -216,7 +218,7 @@ const brandEndpoints = [
     path: '/api/brands/:id',
     description: 'Xóa thương hiệu',
     fullDescription:
-      'Xóa một thương hiệu dựa trên ID. Yêu cầu quyền admin thông qua token JWT.',
+      'Xóa một thương hiệu dựa trên ID. Các sản phẩm liên quan sẽ được đặt `active: false`. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -252,7 +254,7 @@ const brandEndpoints = [
     path: '/api/brands/:id/toggle-visibility',
     description: 'Chuyển đổi hiển thị thương hiệu',
     fullDescription:
-      'Chuyển đổi trạng thái hiển thị của thương hiệu giữa `show` và `hidden`. Khi chuyển sang `hidden`, kiểm tra sản phẩm liên quan có tồn kho và bao gồm cảnh báo nếu có. Cập nhật trạng thái `active` của sản phẩm liên quan (`true` nếu `show`, `false` nếu `hidden`). Yêu cầu quyền admin thông qua token JWT.',
+      'Chuyển đổi trạng thái hiển thị của thương hiệu giữa `show` và `hidden`. Khi chuyển sang `hidden`, kiểm tra sản phẩm liên quan có tồn kho và bao gồm cảnh báo nếu có; các sản phẩm liên quan được đặt `active: false`. Khi chuyển sang `show`, sản phẩm chỉ được đặt `active: true` nếu danh mục tương ứng có trạng thái `show`; nếu không, sản phẩm được đặt `active: false`. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',

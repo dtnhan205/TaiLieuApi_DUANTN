@@ -17,6 +17,7 @@ import Users from './Users';
 import MBBank from './MBBank';
 import Interface from './Interface';
 import Contact from './Contact';
+import Vnpay from './vnpay';
 
 import './css/ApiDocs.css';
 
@@ -37,11 +38,13 @@ const ApiDocs = () => {
     { name: 'email', label: 'Email', component: Email },
     { name: 'news', label: 'News', component: News },
     { name: 'order', label: 'Order', component: Order },
-    { name: 'payment', label: 'Payment', component: Payment },
     { name: 'users', label: 'Users', component: Users },
-    { name: 'mbBank', label: 'MB Bank', component: MBBank },
     { name: 'interface', label: 'Interface', component: Interface },
     { name: 'contact', label: 'Contact', component: Contact },
+    { name: 'mbBank', label: 'MB Bank', component: MBBank },
+    { name: 'vnpay', label: 'VNPay', component: Vnpay },
+    { name: 'payment', label: 'Payment', component: Payment },
+
   ];
 
   const handleRouteClick = (route) => {

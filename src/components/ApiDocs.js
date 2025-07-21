@@ -17,7 +17,7 @@ import Users from './Users';
 import MBBank from './MBBank';
 import Interface from './Interface';
 import Contact from './Contact';
-import Vnpay from './vnpay';
+import Vnpay from './Vnpay';
 
 import './css/ApiDocs.css';
 

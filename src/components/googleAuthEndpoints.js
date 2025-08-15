@@ -42,7 +42,7 @@ const googleAuthEndpoints = [
       status: 302,
       description: 'Chuyển hướng đến URL frontend kèm token JWT trong query string',
       example: {
-        redirect: 'http://localhost:3000/user/login?token=<jwt_token>',
+        redirect: 'http://purebotanica.online/user/login?token=<jwt_token>',
       },
     },
     errorResponses: [
@@ -55,7 +55,7 @@ const googleAuthEndpoints = [
     path: '/logout',
     description: 'Đăng xuất người dùng',
     fullDescription:
-      'Đăng xuất người dùng, xóa session hiện tại và chuyển hướng về URL gốc (mặc định: `http://localhost:3000` hoặc giá trị `BASE_URL` trong biến môi trường).',
+      'Đăng xuất người dùng, xóa session hiện tại và chuyển hướng về URL gốc (mặc định: `http://purebotanica.online` hoặc giá trị `BASE_URL` trong biến môi trường).',
     auth: {
       required: false,
       description: 'Không yêu cầu xác thực trước, nhưng session phải tồn tại để đăng xuất.',
@@ -65,7 +65,7 @@ const googleAuthEndpoints = [
       status: 302,
       description: 'Chuyển hướng về URL gốc',
       example: {
-        redirect: 'http://localhost:3000',
+        redirect: 'http://purebotanica.online',
       },
     },
     errorResponses: [

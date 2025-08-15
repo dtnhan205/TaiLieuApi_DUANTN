@@ -3,11 +3,11 @@ const orderEndpoints = [
     method: 'GET',
     path: '/api/orders/admin/all',
     description: 'Lấy tất cả đơn hàng (admin)',
-    fullDescription: 'Trả về danh sách tất cả đơn hàng trong hệ thống, sắp xếp theo ID giảm dần. Bao gồm thông tin sản phẩm và người dùng được populate. Yêu cầu quyền admin thông qua token JWT.',
+    fullDescription: 'Trả về danh sách tất cả đơn hàng trong hệ thống, sắp xếp theo ngày tạo (`createdAt`) giảm dần. Bao gồm thông tin sản phẩm và người dùng được populate. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [],
     response: {
@@ -19,7 +19,7 @@ const orderEndpoints = [
           user: {
             _id: '60d5f8e9b1a2b4f8e8f9e2b0',
             username: 'user1',
-            email: 'user1@example.com'
+            email: 'user1@example.com',
           },
           items: [
             {
@@ -27,40 +27,62 @@ const orderEndpoints = [
                 _id: '60d5f8e9b1a2b4f8e8f9e2b1',
                 name: 'Sản phẩm A',
                 price: 100000,
-                image: 'image1.jpg'
+                image: 'image1.jpg',
               },
-              quantity: 2
-            }
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 2,
+              images: ['image1.jpg'],
+            },
           ],
+          subtotal: 200000,
+          discount: 0,
           total: 200000,
-          paymentMethod: 'cash',
+          coupon: null,
+          address: {
+            addressLine: '123 Đường Láng',
+            ward: 'Phường 1',
+            district: 'Quận 1',
+            cityOrProvince: 'TP.HCM',
+          },
+          sdt: '0123456789',
+          paymentMethod: 'cod',
           paymentStatus: 'pending',
           shippingStatus: 'pending',
-          address: 'Phường 1, Quận 1, TP.HCM',
+          returnStatus: 'none',
+          returnRequestDate: null,
+          returnReason: null,
+          returnImages: [],
+          returnVideos: [],
           note: 'Giao hàng nhanh',
           createdAt: '2025-07-09T10:18:00Z',
-          updatedAt: '2025-07-09T10:18:00Z'
-        }
-      ]
+          updatedAt: '2025-07-09T10:18:00Z',
+        },
+      ],
     },
     errorResponses: [
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'GET',
     path: '/api/orders/admin/user/:userId',
     description: 'Lấy đơn hàng theo người dùng (admin)',
-    fullDescription: 'Trả về danh sách đơn hàng của một người dùng cụ thể dựa trên userId, sắp xếp theo ID giảm dần. Bao gồm thông tin sản phẩm và người dùng được populate. Yêu cầu quyền admin thông qua token JWT.',
+    fullDescription: 'Trả về danh sách đơn hàng của một người dùng cụ thể dựa trên userId, sắp xếp theo ngày tạo (`createdAt`) giảm dần. Bao gồm thông tin sản phẩm và người dùng được populate. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'userId', type: 'string', description: 'ObjectId của người dùng', required: true }
+      {
+        name: 'userId',
+        type: 'string',
+        description: 'ObjectId của người dùng',
+        required: true,
+        in: 'path',
+      },
     ],
     response: {
       status: 200,
@@ -71,7 +93,7 @@ const orderEndpoints = [
           user: {
             _id: '60d5f8e9b1a2b4f8e8f9e2b0',
             username: 'user1',
-            email: 'user1@example.com'
+            email: 'user1@example.com',
           },
           items: [
             {
@@ -79,29 +101,45 @@ const orderEndpoints = [
                 _id: '60d5f8e9b1a2b4f8e8f9e2b1',
                 name: 'Sản phẩm A',
                 price: 100000,
-                image: 'image1.jpg'
+                image: 'image1.jpg',
               },
-              quantity: 2
-            }
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 2,
+              images: ['image1.jpg'],
+            },
           ],
+          subtotal: 200000,
+          discount: 0,
           total: 200000,
-          paymentMethod: 'cash',
+          coupon: null,
+          address: {
+            addressLine: '123 Đường Láng',
+            ward: 'Phường 1',
+            district: 'Quận 1',
+            cityOrProvince: 'TP.HCM',
+          },
+          sdt: '0123456789',
+          paymentMethod: 'cod',
           paymentStatus: 'pending',
           shippingStatus: 'pending',
-          address: 'Phường 1, Quận 1, TP.HCM',
+          returnStatus: 'none',
+          returnRequestDate: null,
+          returnReason: null,
+          returnImages: [],
+          returnVideos: [],
           note: 'Giao hàng nhanh',
           createdAt: '2025-07-09T10:18:00Z',
-          updatedAt: '2025-07-09T10:18:00Z'
-        }
-      ]
+          updatedAt: '2025-07-09T10:18:00Z',
+        },
+      ],
     },
     errorResponses: [
       { status: 400, description: 'Thiếu userId hoặc userId không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Người dùng không tồn tại' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'GET',
@@ -111,10 +149,16 @@ const orderEndpoints = [
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'orderId', type: 'string', description: 'ObjectId của đơn hàng', required: true }
+      {
+        name: 'orderId',
+        type: 'string',
+        description: 'ObjectId của đơn hàng',
+        required: true,
+        in: 'path',
+      },
     ],
     response: {
       status: 200,
@@ -124,7 +168,7 @@ const orderEndpoints = [
         user: {
           _id: '60d5f8e9b1a2b4f8e8f9e2b0',
           username: 'user1',
-          email: 'user1@example.com'
+          email: 'user1@example.com',
         },
         items: [
           {
@@ -132,41 +176,63 @@ const orderEndpoints = [
               _id: '60d5f8e9b1a2b4f8e8f9e2b1',
               name: 'Sản phẩm A',
               price: 100000,
-              image: 'image1.jpg'
+              image: 'image1.jpg',
             },
-            quantity: 2
-          }
+            optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+            quantity: 2,
+            images: ['image1.jpg'],
+          },
         ],
+        subtotal: 200000,
+        discount: 0,
         total: 200000,
-        paymentMethod: 'cash',
+        coupon: null,
+        address: {
+          addressLine: '123 Đường Láng',
+          ward: 'Phường 1',
+          district: 'Quận 1',
+          cityOrProvince: 'TP.HCM',
+        },
+        sdt: '0123456789',
+        paymentMethod: 'cod',
         paymentStatus: 'pending',
         shippingStatus: 'pending',
-        address: 'Phường 1, Quận 1, TP.HCM',
+        returnStatus: 'none',
+        returnRequestDate: null,
+        returnReason: null,
+        returnImages: [],
+        returnVideos: [],
         note: 'Giao hàng nhanh',
         createdAt: '2025-07-09T10:18:00Z',
-        updatedAt: '2025-07-09T10:18:00Z'
-      }
+        updatedAt: '2025-07-09T10:18:00Z',
+      },
     },
     errorResponses: [
       { status: 400, description: 'Thiếu orderId hoặc orderId không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Không tìm thấy đơn hàng' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'GET',
     path: '/api/orders/user/:userId',
     description: 'Lấy danh sách đơn hàng của người dùng',
-    fullDescription: 'Trả về danh sách đơn hàng của một người dùng dựa trên userId, sắp xếp theo ID giảm dần. Bao gồm thông tin sản phẩm được populate. Yêu cầu xác thực thông qua token JWT.',
+    fullDescription: 'Trả về danh sách đơn hàng của một người dùng dựa trên userId, sắp xếp theo ngày tạo (`createdAt`) giảm dần. Chỉ trả về các đơn hàng của người dùng đang đăng nhập (kiểm tra qua token). Bao gồm thông tin sản phẩm được populate. Yêu cầu xác thực thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của người dùng được yêu cầu trong header.'
+      description: 'Token JWT của người dùng được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'userId', type: 'string', description: 'ObjectId của người dùng', required: true }
+      {
+        name: 'userId',
+        type: 'string',
+        description: 'ObjectId của người dùng (phải khớp với userId trong token)',
+        required: true,
+        in: 'path',
+      },
     ],
     response: {
       status: 200,
@@ -177,7 +243,7 @@ const orderEndpoints = [
           user: {
             _id: '60d5f8e9b1a2b4f8e8f9e2b0',
             username: 'user1',
-            email: 'user1@example.com'
+            email: 'user1@example.com',
           },
           items: [
             {
@@ -185,41 +251,63 @@ const orderEndpoints = [
                 _id: '60d5f8e9b1a2b4f8e8f9e2b1',
                 name: 'Sản phẩm A',
                 price: 100000,
-                image: 'image1.jpg'
+                image: 'image1.jpg',
               },
-              quantity: 2
-            }
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 2,
+              images: ['image1.jpg'],
+            },
           ],
+          subtotal: 200000,
+          discount: 0,
           total: 200000,
-          paymentMethod: 'cash',
+          coupon: null,
+          address: {
+            addressLine: '123 Đường Láng',
+            ward: 'Phường 1',
+            district: 'Quận 1',
+            cityOrProvince: 'TP.HCM',
+          },
+          sdt: '0123456789',
+          paymentMethod: 'cod',
           paymentStatus: 'pending',
           shippingStatus: 'pending',
-          address: 'Phường 1, Quận 1, TP.HCM',
+          returnStatus: 'none',
+          returnRequestDate: null,
+          returnReason: null,
+          returnImages: [],
+          returnVideos: [],
           note: 'Giao hàng nhanh',
           createdAt: '2025-07-09T10:18:00Z',
-          updatedAt: '2025-07-09T10:18:00Z'
-        }
-      ]
+          updatedAt: '2025-07-09T10:18:00Z',
+        },
+      ],
     },
     errorResponses: [
       { status: 400, description: 'Thiếu userId hoặc userId không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 404, description: 'Người dùng không tồn tại' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'GET',
     path: '/api/orders/order/:orderId',
     description: 'Lấy chi tiết đơn hàng',
-    fullDescription: 'Trả về chi tiết một đơn hàng dựa trên orderId, bao gồm thông tin sản phẩm và người dùng được populate. Yêu cầu xác thực thông qua token JWT.',
+    fullDescription: 'Trả về chi tiết một đơn hàng dựa trên orderId, chỉ trả về nếu đơn hàng thuộc về người dùng đang đăng nhập (kiểm tra qua token). Bao gồm thông tin sản phẩm và người dùng được populate. Yêu cầu xác thực thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của người dùng được yêu cầu trong header.'
+      description: 'Token JWT của người dùng được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'orderId', type: 'string', description: 'ObjectId của đơn hàng', required: true }
+      {
+        name: 'orderId',
+        type: 'string',
+        description: 'ObjectId của đơn hàng',
+        required: true,
+        in: 'path',
+      },
     ],
     response: {
       status: 200,
@@ -229,7 +317,7 @@ const orderEndpoints = [
         user: {
           _id: '60d5f8e9b1a2b4f8e8f9e2b0',
           username: 'user1',
-          email: 'user1@example.com'
+          email: 'user1@example.com',
         },
         items: [
           {
@@ -237,27 +325,43 @@ const orderEndpoints = [
               _id: '60d5f8e9b1a2b4f8e8f9e2b1',
               name: 'Sản phẩm A',
               price: 100000,
-              image: 'image1.jpg'
+              image: 'image1.jpg',
             },
-            quantity: 2
-          }
+            optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+            quantity: 2,
+            images: ['image1.jpg'],
+          },
         ],
+        subtotal: 200000,
+        discount: 0,
         total: 200000,
-        paymentMethod: 'cash',
+        coupon: null,
+        address: {
+          addressLine: '123 Đường Láng',
+          ward: 'Phường 1',
+          district: 'Quận 1',
+          cityOrProvince: 'TP.HCM',
+        },
+        sdt: '0123456789',
+        paymentMethod: 'cod',
         paymentStatus: 'pending',
         shippingStatus: 'pending',
-        address: 'Phường 1, Quận 1, TP.HCM',
+        returnStatus: 'none',
+        returnRequestDate: null,
+        returnReason: null,
+        returnImages: [],
+        returnVideos: [],
         note: 'Giao hàng nhanh',
         createdAt: '2025-07-09T10:18:00Z',
-        updatedAt: '2025-07-09T10:18:00Z'
-      }
+        updatedAt: '2025-07-09T10:18:00Z',
+      },
     },
     errorResponses: [
       { status: 400, description: 'Thiếu orderId hoặc orderId không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
-      { status: 404, description: 'Không tìm thấy đơn hàng' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 404, description: 'Không tìm thấy đơn hàng hoặc đơn hàng không thuộc về người dùng' },
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'PUT',
@@ -267,19 +371,29 @@ const orderEndpoints = [
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'orderId', type: 'string', description: 'ObjectId của đơn hàng', required: true },
-      { name: 'userId', type: 'string', description: 'ObjectId của người dùng (gửi qua query hoặc body)', required: true },
-      { name: 'paymentStatus', type: 'string', description: 'Trạng thái thanh toán mới (`pending`, `completed`, `failed`, `cancelled`)', required: true }
+      {
+        name: 'orderId',
+        type: 'string',
+        description: 'ObjectId của đơn hàng',
+        required: true,
+        in: 'path',
+      },
+      {
+        name: 'paymentStatus',
+        type: 'string',
+        description: 'Trạng thái thanh toán mới (`pending`, `completed`, `failed`, `cancelled`)',
+        required: true,
+        in: 'body',
+      },
     ],
     requestExample: {
-      headers: { 'Authorization': 'Bearer <token>' },
+      headers: { Authorization: 'Bearer <token>' },
       body: {
-        userId: '60d5f8e9b1a2b4f8e8f9e2b0',
-        paymentStatus: 'completed'
-      }
+        paymentStatus: 'completed',
+      },
     },
     response: {
       status: 200,
@@ -291,7 +405,7 @@ const orderEndpoints = [
           user: {
             _id: '60d5f8e9b1a2b4f8e8f9e2b0',
             username: 'user1',
-            email: 'user1@example.com'
+            email: 'user1@example.com',
           },
           items: [
             {
@@ -299,64 +413,135 @@ const orderEndpoints = [
                 _id: '60d5f8e9b1a2b4f8e8f9e2b1',
                 name: 'Sản phẩm A',
                 price: 100000,
-                image: 'image1.jpg'
+                image: 'image1.jpg',
               },
-              quantity: 2
-            }
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 2,
+              images: ['image1.jpg'],
+            },
           ],
+          subtotal: 200000,
+          discount: 0,
           total: 200000,
-          paymentMethod: 'cash',
+          coupon: null,
+          address: {
+            addressLine: '123 Đường Láng',
+            ward: 'Phường 1',
+            district: 'Quận 1',
+            cityOrProvince: 'TP.HCM',
+          },
+          sdt: '0123456789',
+          paymentMethod: 'cod',
           paymentStatus: 'completed',
           shippingStatus: 'pending',
-          address: 'Phường 1, Quận 1, TP.HCM',
+          returnStatus: 'none',
+          returnRequestDate: null,
+          returnReason: null,
+          returnImages: [],
+          returnVideos: [],
           note: 'Giao hàng nhanh',
           createdAt: '2025-07-09T10:18:00Z',
-          updatedAt: '2025-07-09T10:20:00Z'
-        }
-      }
+          updatedAt: '2025-07-09T10:20:00Z',
+        },
+      },
     },
     errorResponses: [
-      { status: 400, description: 'Thiếu userId, orderId không hợp lệ, hoặc trạng thái thanh toán không hợp lệ' },
+      { status: 400, description: 'Thiếu orderId hoặc orderId không hợp lệ, hoặc trạng thái thanh toán không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
-      { status: 404, description: 'Người dùng hoặc đơn hàng không tồn tại' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 404, description: 'Không tìm thấy đơn hàng' },
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'PUT',
     path: '/api/orders/update/:orderId',
     description: 'Cập nhật thông tin đơn hàng',
-    fullDescription: 'Cập nhật các thông tin của một đơn hàng dựa trên orderId, bao gồm phương thức thanh toán, ghi chú, sản phẩm, trạng thái thanh toán, trạng thái vận chuyển, tổng tiền, và địa chỉ. Yêu cầu quyền admin thông qua token JWT.',
+    fullDescription: 'Cập nhật các thông tin của một đơn hàng dựa trên orderId, bao gồm trạng thái thanh toán, trạng thái vận chuyển, trạng thái hoàn hàng, lý do hủy, địa chỉ giao hàng, danh sách sản phẩm, và tổng tiền. Yêu cầu quyền admin thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'orderId', type: 'string', description: 'ObjectId của đơn hàng', required: true },
-      { name: 'paymentMethod', type: 'string', description: 'Phương thức thanh toán mới', required: false },
-      { name: 'note', type: 'string', description: 'Ghi chú mới', required: false },
-      { name: 'productDetails', type: 'array', description: 'Danh sách sản phẩm mới', required: false },
-      { name: 'paymentStatus', type: 'string', description: 'Trạng thái thanh toán mới (`pending`, `completed`, `failed`, `cancelled`)', required: false },
-      { name: 'shippingStatus', type: 'string', description: 'Trạng thái vận chuyển mới (`pending`, `in_transit`, `delivered`, `returned`)', required: false },
-      { name: 'total', type: 'number', description: 'Tổng tiền mới', required: false },
-      { name: 'address', type: 'string | object', description: 'Địa chỉ mới (chuỗi hoặc object {ward, district, cityOrProvince})', required: false }
+      {
+        name: 'orderId',
+        type: 'string',
+        description: 'ObjectId của đơn hàng',
+        required: true,
+        in: 'path',
+      },
+      {
+        name: 'shippingStatus',
+        type: 'string',
+        description: 'Trạng thái vận chuyển mới (`pending`, `in_transit`, `delivered`, `returned`, `cancelled`)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'paymentStatus',
+        type: 'string',
+        description: 'Trạng thái thanh toán mới (`pending`, `completed`, `failed`, `cancelled`)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'returnStatus',
+        type: 'string',
+        description: 'Trạng thái hoàn hàng mới (`none`, `requested`, `approved`, `rejected`)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'cancelReason',
+        type: 'string',
+        description: 'Lý do hủy đơn hàng (`Đổi ý không mua nữa`, `Muốn thay đổi sản phẩm`, `Thay đổi phương thức thanh toán`, `Thay đổi địa chỉ giao hàng`, `Lý do khác`, `out_of_stock`, `customer_cancelled`, `system_error`, `other`)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'items',
+        type: 'array',
+        description: 'Danh sách sản phẩm mới (mỗi phần tử chứa product, optionId, quantity, images)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'totalPrice',
+        type: 'number',
+        description: 'Tổng tiền mới (phải không âm)',
+        required: false,
+        in: 'body',
+      },
+      {
+        name: 'shippingAddress',
+        type: 'object',
+        description: 'Địa chỉ giao hàng mới (object chứa addressLine, ward, district, cityOrProvince)',
+        required: false,
+        in: 'body',
+      },
     ],
     requestExample: {
-      headers: { 'Authorization': 'Bearer <token>' },
+      headers: { Authorization: 'Bearer <token>' },
       body: {
-        paymentMethod: 'credit_card',
-        note: 'Giao hàng cẩn thận',
-        paymentStatus: 'completed',
         shippingStatus: 'in_transit',
-        total: 250000,
-        address: {
+        paymentStatus: 'completed',
+        totalPrice: 250000,
+        shippingAddress: {
+          addressLine: '456 Đường Láng',
           ward: 'Phường 2',
           district: 'Quận 1',
-          cityOrProvince: 'TP.HCM'
-        }
-      }
+          cityOrProvince: 'TP.HCM',
+        },
+        items: [
+          {
+            product: '60d5f8e9b1a2b4f8e8f9e2b1',
+            optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+            quantity: 3,
+            images: ['image1.jpg'],
+          },
+        ],
+      },
     },
     response: {
       status: 200,
@@ -368,7 +553,7 @@ const orderEndpoints = [
           user: {
             _id: '60d5f8e9b1a2b4f8e8f9e2b0',
             username: 'user1',
-            email: 'user1@example.com'
+            email: 'user1@example.com',
           },
           items: [
             {
@@ -376,61 +561,97 @@ const orderEndpoints = [
                 _id: '60d5f8e9b1a2b4f8e8f9e2b1',
                 name: 'Sản phẩm A',
                 price: 100000,
-                image: 'image1.jpg'
+                image: 'image1.jpg',
               },
-              quantity: 2
-            }
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 3,
+              images: ['image1.jpg'],
+            },
           ],
+          subtotal: 300000,
+          discount: 0,
           total: 250000,
-          paymentMethod: 'credit_card',
+          coupon: null,
+          address: {
+            addressLine: '456 Đường Láng',
+            ward: 'Phường 2',
+            district: 'Quận 1',
+            cityOrProvince: 'TP.HCM',
+          },
+          sdt: '0123456789',
+          paymentMethod: 'cod',
           paymentStatus: 'completed',
           shippingStatus: 'in_transit',
-          address: 'Phường 2, Quận 1, TP.HCM',
-          note: 'Giao hàng cẩn thận',
+          returnStatus: 'none',
+          returnRequestDate: null,
+          returnReason: null,
+          returnImages: [],
+          returnVideos: [],
+          note: 'Giao hàng nhanh',
           createdAt: '2025-07-09T10:18:00Z',
-          updatedAt: '2025-07-09T10:20:00Z'
-        }
-      }
+          updatedAt: '2025-07-09T10:20:00Z',
+        },
+      },
     },
     errorResponses: [
-      { status: 400, description: 'Thiếu orderId, orderId không hợp lệ, trạng thái thanh toán/vận chuyển không hợp lệ, hoặc định dạng địa chỉ không hợp lệ' },
+      { status: 400, description: 'Thiếu orderId, orderId không hợp lệ, trạng thái thanh toán/vận chuyển/hoàn hàng không hợp lệ, hoặc dữ liệu cập nhật không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Không tìm thấy đơn hàng' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' },
+    ],
   },
   {
     method: 'DELETE',
     path: '/api/orders/cancel/:orderId',
     description: 'Hủy đơn hàng',
-    fullDescription: 'Hủy một đơn hàng dựa trên orderId, chỉ cho phép hủy khi trạng thái thanh toán là `pending`. Yêu cầu quyền admin thông qua token JWT và userId qua query hoặc body.',
+    fullDescription: 'Hủy một đơn hàng dựa trên orderId, chỉ cho phép hủy khi trạng thái thanh toán (`paymentStatus`) và vận chuyển (`shippingStatus`) là `pending`. Người dùng chỉ có thể hủy đơn hàng của chính mình, trong khi admin có thể hủy bất kỳ đơn hàng nào. Yêu cầu xác thực thông qua token JWT. Gửi email thông báo hủy đơn hàng tới người dùng.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của admin được yêu cầu trong header.'
+      description: 'Token JWT của người dùng hoặc admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
     },
     parameters: [
-      { name: 'orderId', type: 'string', description: 'ObjectId của đơn hàng', required: true },
-      { name: 'userId', type: 'string', description: 'ObjectId của người dùng (gửi qua query hoặc body)', required: true }
+      {
+        name: 'orderId',
+        type: 'string',
+        description: 'ObjectId của đơn hàng',
+        required: true,
+        in: 'path',
+      },
+      {
+        name: 'cancelReason',
+        type: 'string',
+        description: 'Lý do hủy đơn hàng (`Đổi ý không mua nữa`, `Muốn thay đổi sản phẩm`, `Thay đổi phương thức thanh toán`, `Thay đổi địa chỉ giao hàng`, `Lý do khác`, `out_of_stock`, `customer_cancelled`, `system_error`, `other`)',
+        required: true,
+        in: 'body',
+      },
+      {
+        name: 'cancelNote',
+        type: 'string',
+        description: 'Ghi chú hủy đơn hàng (tùy chọn)',
+        required: false,
+        in: 'body',
+      },
     ],
     requestExample: {
-      headers: { 'Authorization': 'Bearer <token>' },
+      headers: { Authorization: 'Bearer <token>' },
       body: {
-        userId: '60d5f8e9b1a2b4f8e8f9e2b0'
-      }
+        cancelReason: 'Đổi ý không mua nữa',
+        cancelNote: 'Không cần sản phẩm này nữa',
+      },
     },
     response: {
       status: 200,
       description: 'Hủy đơn hàng thành công',
       example: {
-        message: 'Đã hủy đơn hàng thành công',
+        message: 'Hủy đơn hàng thành công',
         order: {
           _id: '60d5f8e9b1a2b4f8e8f9e2c7',
           user: {
             _id: '60d5f8e9b1a2b4f8e8f9e2b0',
             username: 'user1',
-            email: 'user1@example.com'
+            email: 'user1@example.com',
           },
           items: [
             {
@@ -438,30 +659,260 @@ const orderEndpoints = [
                 _id: '60d5f8e9b1a2b4f8e8f9e2b1',
                 name: 'Sản phẩm A',
                 price: 100000,
-                image: 'image1.jpg'
+                image: 'image1.jpg',
               },
-              quantity: 2
-            }
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 2,
+              images: ['image1.jpg'],
+            },
           ],
+          subtotal: 200000,
+          discount: 0,
           total: 200000,
-          paymentMethod: 'cash',
+          coupon: null,
+          address: {
+            addressLine: '123 Đường Láng',
+            ward: 'Phường 1',
+            district: 'Quận 1',
+            cityOrProvince: 'TP.HCM',
+          },
+          sdt: '0123456789',
+          paymentMethod: 'cod',
           paymentStatus: 'cancelled',
-          shippingStatus: 'pending',
-          address: 'Phường 1, Quận 1, TP.HCM',
+          shippingStatus: 'cancelled',
+          returnStatus: 'none',
+          returnRequestDate: null,
+          returnReason: null,
+          returnImages: [],
+          returnVideos: [],
           note: 'Giao hàng nhanh',
+          cancelReason: 'Đổi ý không mua nữa',
+          cancelNote: 'Không cần sản phẩm này nữa',
+          cancelledAt: '2025-07-09T10:20:00Z',
+          cancelledBy: '60d5f8e9b1a2b4f8e8f9e2b0',
           createdAt: '2025-07-09T10:18:00Z',
-          updatedAt: '2025-07-09T10:20:00Z'
-        }
-      }
+          updatedAt: '2025-07-09T10:20:00Z',
+        },
+      },
     },
     errorResponses: [
-      { status: 400, description: 'Thiếu userId, userId/orderId không hợp lệ, hoặc không thể hủy do trạng thái thanh toán không phải `pending`' },
+      { status: 400, description: 'Thiếu orderId, orderId không hợp lệ, thiếu lý do hủy, lý do hủy không hợp lệ, hoặc không thể hủy do trạng thái không phải `pending`' },
+      { status: 401, description: 'Không có token hoặc token không hợp lệ' },
+      { status: 403, description: 'Người dùng không có quyền hủy đơn hàng này' },
+      { status: 404, description: 'Không tìm thấy đơn hàng' },
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database hoặc lỗi gửi email' },
+    ],
+  },
+  {
+    method: 'POST',
+    path: '/api/orders/return/:orderId',
+    description: 'Yêu cầu hoàn hàng',
+    fullDescription: 'Gửi yêu cầu hoàn hàng cho một đơn hàng dựa trên orderId, chỉ cho phép khi đơn hàng ở trạng thái `delivered` và trong vòng 3-4 ngày kể từ khi đặt hàng. Yêu cầu lý do hoàn hàng và có thể đính kèm ảnh/video qua `multipart/form-data`. Chỉ người dùng sở hữu đơn hàng có thể gửi yêu cầu. Gửi email thông báo tới người dùng. Yêu cầu xác thực thông qua token JWT.',
+    auth: {
+      required: true,
+      header: 'Authorization: Bearer <token>',
+      description: 'Token JWT của người dùng được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
+    },
+    parameters: [
+      {
+        name: 'orderId',
+        type: 'string',
+        description: 'ObjectId của đơn hàng',
+        required: true,
+        in: 'path',
+      },
+      {
+        name: 'returnReason',
+        type: 'string',
+        description: 'Lý do yêu cầu hoàn hàng',
+        required: true,
+        in: 'body',
+      },
+      {
+        name: 'returnImages',
+        type: 'file',
+        description: 'File ảnh đính kèm (jpg, jpeg, png, gif, webp, svg; tối đa 20MB mỗi file, tùy chọn)',
+        required: false,
+        in: 'formData',
+      },
+      {
+        name: 'returnVideos',
+        type: 'file',
+        description: 'File video đính kèm (mp4, mov, avi; tối đa 20MB mỗi file, tùy chọn)',
+        required: false,
+        in: 'formData',
+      },
+    ],
+    requestExample: {
+      headers: { Authorization: 'Bearer <token>', 'Content-Type': 'multipart/form-data' },
+      body: {
+        returnReason: 'Sản phẩm bị lỗi',
+      },
+      files: {
+        returnImages: ['image1.jpg', 'image2.jpg'],
+        returnVideos: ['video1.mp4'],
+      },
+    },
+    response: {
+      status: 200,
+      description: 'Yêu cầu hoàn hàng thành công',
+      example: {
+        message: 'Yêu cầu hoàn hàng đã được gửi thành công',
+        order: {
+          _id: '60d5f8e9b1a2b4f8e8f9e2c7',
+          user: {
+            _id: '60d5f8e9b1a2b4f8e8f9e2b0',
+            username: 'user1',
+            email: 'user1@example.com',
+          },
+          items: [
+            {
+              product: {
+                _id: '60d5f8e9b1a2b4f8e8f9e2b1',
+                name: 'Sản phẩm A',
+                price: 100000,
+                image: 'image1.jpg',
+              },
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 2,
+              images: ['image1.jpg'],
+            },
+          ],
+          subtotal: 200000,
+          discount: 0,
+          total: 200000,
+          coupon: null,
+          address: {
+            addressLine: '123 Đường Láng',
+            ward: 'Phường 1',
+            district: 'Quận 1',
+            cityOrProvince: 'TP.HCM',
+          },
+          sdt: '0123456789',
+          paymentMethod: 'cod',
+          paymentStatus: 'completed',
+          shippingStatus: 'delivered',
+          returnStatus: 'requested',
+          returnRequestDate: '2025-07-10T10:18:00Z',
+          returnReason: 'Sản phẩm bị lỗi',
+          returnImages: [
+            { url: 'https://res.cloudinary.com/your_cloud_name/image/upload/return1.jpg', public_id: 'return1' },
+            { url: 'https://res.cloudinary.com/your_cloud_name/image/upload/return2.jpg', public_id: 'return2' },
+          ],
+          returnVideos: [
+            { url: 'https://res.cloudinary.com/your_cloud_name/video/upload/video1.mp4', public_id: 'video1' },
+          ],
+          note: 'Giao hàng nhanh',
+          createdAt: '2025-07-09T10:18:00Z',
+          updatedAt: '2025-07-10T10:18:00Z',
+        },
+      },
+    },
+    errorResponses: [
+      { status: 400, description: 'Thiếu orderId, orderId không hợp lệ, thiếu lý do hoàn hàng, đơn hàng không ở trạng thái `delivered`, hoặc vượt quá thời hạn 3-4 ngày' },
+      { status: 400, description: 'Chỉ hỗ trợ file ảnh (jpg, jpeg, png, gif, webp, svg) hoặc video (mp4, mov, avi) cho returnImages/returnVideos' },
+      { status: 400, description: 'Kích thước file vượt quá 20MB' },
+      { status: 401, description: 'Không có token hoặc token không hợp lệ' },
+      { status: 403, description: 'Người dùng không có quyền yêu cầu hoàn hàng này' },
+      { status: 404, description: 'Không tìm thấy đơn hàng' },
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database, Cloudinary, hoặc lỗi gửi email' },
+    ],
+  },
+  {
+    method: 'PUT',
+    path: '/api/orders/admin/return/:orderId',
+    description: 'Xác nhận yêu cầu hoàn hàng (admin)',
+    fullDescription: 'Xác nhận hoặc từ chối yêu cầu hoàn hàng cho một đơn hàng dựa trên orderId. Trạng thái hoàn hàng (`returnStatus`) có thể được cập nhật thành `approved` hoặc `rejected`. Nếu `approved`, trạng thái vận chuyển (`shippingStatus`) sẽ được cập nhật thành `returned`. Gửi email thông báo tới người dùng. Yêu cầu quyền admin thông qua token JWT.',
+    auth: {
+      required: true,
+      header: 'Authorization: Bearer <token>',
+      description: 'Token JWT của admin được yêu cầu trong header. Token được cấp sau khi đăng nhập qua endpoint `/api/users/login`.',
+    },
+    parameters: [
+      {
+        name: 'orderId',
+        type: 'string',
+        description: 'ObjectId của đơn hàng',
+        required: true,
+        in: 'path',
+      },
+      {
+        name: 'returnStatus',
+        type: 'string',
+        description: 'Trạng thái hoàn hàng mới (`approved` hoặc `rejected`)',
+        required: true,
+        in: 'body',
+      },
+    ],
+    requestExample: {
+      headers: { Authorization: 'Bearer <token>' },
+      body: {
+        returnStatus: 'approved',
+      },
+    },
+    response: {
+      status: 200,
+      description: 'Xác nhận yêu cầu hoàn hàng thành công',
+      example: {
+        message: 'Yêu cầu hoàn hàng đã được chấp nhận',
+        order: {
+          _id: '60d5f8e9b1a2b4f8e8f9e2c7',
+          user: {
+            _id: '60d5f8e9b1a2b4f8e8f9e2b0',
+            username: 'user1',
+            email: 'user1@example.com',
+          },
+          items: [
+            {
+              product: {
+                _id: '60d5f8e9b1a2b4f8e8f9e2b1',
+                name: 'Sản phẩm A',
+                price: 100000,
+                image: 'image1.jpg',
+              },
+              optionId: '60d5f8e9b1a2b4f8e8f9e2b2',
+              quantity: 2,
+              images: ['image1.jpg'],
+            },
+          ],
+          subtotal: 200000,
+          discount: 0,
+          total: 200000,
+          coupon: null,
+          address: {
+            addressLine: '123 Đường Láng',
+            ward: 'Phường 1',
+            district: 'Quận 1',
+            cityOrProvince: 'TP.HCM',
+          },
+          sdt: '0123456789',
+          paymentMethod: 'cod',
+          paymentStatus: 'completed',
+          shippingStatus: 'returned',
+          returnStatus: 'approved',
+          returnRequestDate: '2025-07-10T10:18:00Z',
+          returnReason: 'Sản phẩm bị lỗi',
+          returnImages: [
+            { url: 'https://res.cloudinary.com/your_cloud_name/image/upload/return1.jpg', public_id: 'return1' },
+            { url: 'https://res.cloudinary.com/your_cloud_name/image/upload/return2.jpg', public_id: 'return2' },
+          ],
+          returnVideos: [
+            { url: 'https://res.cloudinary.com/your_cloud_name/video/upload/video1.mp4', public_id: 'video1' },
+          ],
+          note: 'Giao hàng nhanh',
+          createdAt: '2025-07-09T10:18:00Z',
+          updatedAt: '2025-07-10T10:20:00Z',
+        },
+      },
+    },
+    errorResponses: [
+      { status: 400, description: 'Thiếu orderId, orderId không hợp lệ, trạng thái hoàn hàng không hợp lệ, hoặc đơn hàng không ở trạng thái `requested`' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
-      { status: 404, description: 'Người dùng hoặc đơn hàng không tồn tại' },
-      { status: 500, description: 'Lỗi máy chủ' }
-    ]
-  }
+      { status: 404, description: 'Không tìm thấy đơn hàng' },
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database hoặc lỗi gửi email' },
+    ],
+  },
 ];
 
 export default orderEndpoints;

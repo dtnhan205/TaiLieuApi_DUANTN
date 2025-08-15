@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import EndpointItem from './EndpointItem';
-import brandEndpoints from './brandEndpoints';
+import brandEndpoints from './brandEndpoints.js';
 
 const Brand = ({ openEndpoint, setOpenEndpoint }) => {
   // Tối ưu hiệu suất với useMemo

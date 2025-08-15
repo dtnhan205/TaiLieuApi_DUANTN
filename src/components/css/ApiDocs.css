@@ -1,19 +1,21 @@
+/* Main layout */
 .api-docs {
   font-family: 'Arial', sans-serif;
   max-width: 1300px;
   margin: 0 auto;
   padding: 15px;
-  background-color: #f9f9f9;
+  background-color: #000000; /* Dark background */
+  color: #e0e0e0; /* Light text for contrast */
   box-sizing: border-box;
 }
 
 .api-header {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ffffff; /* Darker border */
   padding-bottom: 8px;
   margin-bottom: 15px;
   position: sticky;
   top: 0;
-  background-color: #f9f9f9;
+  background-color: #000000; /* Dark header background */
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -23,32 +25,37 @@
 .api-header h1 {
   font-size: 22px;
   margin: 0;
+  color: #ffffff; /* White for better visibility */
 }
 
 .version {
   font-size: 13px;
   color: #fff;
-  background-color: #3f51b5;
+  background-color: #3f51b5; /* Keep original color for version badge */
   padding: 2px 8px;
   border-radius: 4px;
   margin-left: 8px;
 }
 
 .oas {
-  background-color: #ff9800;
+  background-color: #ff9800; /* Keep original color for OAS badge */
   padding: 2px 6px;
   border-radius: 4px;
 }
 
 .api-info {
   font-size: 13px;
-  color: #666;
+  color: #b0b0b0; /* Light gray for secondary text */
   margin: 5px 0;
 }
 
 .api-info a {
-  color: #3f51b5;
+  color: #4caf50; /* Bright green for links */
   text-decoration: none;
+}
+
+.api-info a:hover {
+  color: #66bb6a; /* Lighter green on hover */
 }
 
 .server-selection {
@@ -58,13 +65,16 @@
 .server-selection label {
   font-weight: bold;
   margin-right: 8px;
+  color: #e0e0e0; /* Light text */
 }
 
 .server-selection select {
   padding: 5px;
   font-size: 13px;
   border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid #333; /* Dark border */
+  background-color: #1e1e1e; /* Dark select background */
+  color: #e0e0e0; /* Light text */
   width: 100%;
   max-width: 300px;
 }
@@ -78,28 +88,29 @@
 }
 
 .route-sidebar {
-  width: 260px; /* Tăng nhẹ chiều rộng để thoáng hơn */
-  background-color: #ffffff;
-  border-right: 1px solid #e0e0e0; /* Màu viền nhẹ hơn */
-  padding: 15px; /* Tăng padding cho không gian thoải mái */
+  width: 260px;
+  background-color: #000000; /* Dark sidebar background */
+  border: solid 1px #ffffff; /* Darker border */
+  border-right: 1px solid #333; /* Darker border */
+  padding: 15px;
   position: sticky;
   top: 20px;
   overflow-y: auto;
   max-height: 80vh;
   flex-shrink: 0;
   box-sizing: border-box;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Thêm bóng nhẹ để tăng chiều sâu */
-  border-radius: 8px; /* Bo góc nhẹ */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Darker shadow */
+  border-radius: 8px;
 }
 
 .route-sidebar h2 {
   font-size: 16px;
   margin-bottom: 15px;
-  color: #222; /* Màu đậm hơn cho tiêu đề */
+  color: #ffffff; /* White for title */
   font-weight: 600;
-  border-bottom: 2px solid #e8ecef; /* Viền dưới đậm hơn một chút */
+  border-bottom: 2px solid #444; /* Darker border */
   padding-bottom: 8px;
-  letter-spacing: 0.5px; /* Tăng khoảng cách chữ cho tiêu đề */
+  letter-spacing: 0.5px;
 }
 
 .route-list {
@@ -107,38 +118,38 @@
   padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: column; /* Đảm bảo bố cục dọc */
-  gap: 6px; /* Khoảng cách giữa các route */
+  flex-direction: column;
+  gap: 6px;
 }
 
 .route-btn {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 12px 15px; /* Tăng padding để nút dễ bấm hơn */
+  padding: 12px 15px;
   font-size: 15px;
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #333; /* Màu chữ tối hơn một chút */
+  color: #e0e0e0; /* Light text */
   border-radius: 6px;
   transition: all 0.3s ease;
   text-align: left;
   position: relative;
-  font-weight: 500; /* Tăng độ đậm chữ nhẹ */
+  font-weight: 500;
 }
 
 .route-btn:hover {
-  background-color: #f1f6ff; /* Màu nền hover nhẹ nhàng hơn */
-  color: #1e88e5; /* Màu chữ khi hover */
-  transform: translateX(4px); /* Hiệu ứng dịch chuyển nhẹ khi hover */
+  background-color: #2e2e2e; /* Darker hover background */
+  color: #4caf50; /* Bright green on hover */
+  transform: translateX(4px);
 }
 
 .route-btn.active {
-  background-color: #e3f2fd; /* Màu nền khi active */
-  color: #1e88e5;
+  background-color: #2e7d32; /* Green for active state */
+  color: #ffffff;
   font-weight: 600;
-  box-shadow: inset 0 0 0 1px #bbdefb; /* Viền nhẹ khi active */
+  box-shadow: inset 0 0 0 1px #4caf50; /* Green border */
 }
 
 .route-btn.active::before {
@@ -148,8 +159,8 @@
   top: 50%;
   transform: translateY(-50%);
   width: 4px;
-  height: 24px; /* Tăng chiều cao thanh active */
-  background-color: #1e88e5; /* Màu thanh active nổi bật hơn */
+  height: 24px;
+  background-color: #4caf50; /* Green active indicator */
   border-radius: 0 4px 4px 0;
 }
 
@@ -158,11 +169,11 @@
   .route-sidebar {
     width: 100%;
     border-right: none;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #333;
     position: static;
     max-height: 40vh;
     padding: 12px;
-    border-radius: 6px; /* Bo góc nhẹ hơn cho mobile */
+    border-radius: 6px;
   }
 
   .route-sidebar h2 {
@@ -177,16 +188,17 @@
   }
 
   .route-btn.active::before {
-    height: 20px; /* Giảm nhẹ chiều cao thanh active trên mobile */
+    height: 20px;
   }
 }
 
 .route-details {
   flex: 1;
   padding: 15px;
-  background-color: #fff;
+  background-color: #000000; /* Dark background */
+  border: solid 1px #ffffff; /* Darker border */
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   margin-top: 10px;
   min-height: 300px;
   display: flex;
@@ -227,16 +239,16 @@
 }
 
 .endpoint-item:has(.method-btn.get) {
-  background-color: #e8f5e9;
+  background-color: #1a3c1e; /* Dark green for GET */
 }
 .endpoint-item:has(.method-btn.post) {
-  background-color: #fff3e0;
+  background-color: #3f2a1d; /* Dark orange for POST */
 }
 .endpoint-item:has(.method-btn.put) {
-  background-color: #e3f2fd;
+  background-color: #1e2a3c; /* Dark blue for PUT */
 }
 .endpoint-item:has(.method-btn.delete) {
-  background-color: #ffebee;
+  background-color: #3c1e1e; /* Dark red for DELETE */
 }
 
 .endpoint-header {
@@ -253,20 +265,20 @@
 }
 
 .endpoint-header .method-btn.get ~ * {
-  border-color: #64cc71;
+  border-color: #4caf50; /* Green border */
 }
 .endpoint-header .method-btn.post ~ * {
-  border-color: #b38353;
+  border-color: #ff9800; /* Orange border */
 }
 .endpoint-header .method-btn.put ~ * {
-  border-color: #1976d2;
+  border-color: #2196f3; /* Blue border */
 }
 .endpoint-header .method-btn.delete ~ * {
-  border-color: #d32f2f;
+  border-color: #f44336; /* Red border */
 }
 
 .endpoint-header:hover {
-  background-color: #e0e0e0;
+  background-color: #2e2e2e; /* Darker hover background */
 }
 
 .method-btn {
@@ -282,19 +294,19 @@
 }
 
 .method-btn.get {
-  background-color: #4caf50;
+  background-color: #4caf50; /* Keep green for GET */
 }
 
 .method-btn.post {
-  background-color: #ff9800;
+  background-color: #ff9800; /* Keep orange for POST */
 }
 
 .method-btn.put {
-  background-color: #2196f3;
+  background-color: #2196f3; /* Keep blue for PUT */
 }
 
 .method-btn.delete {
-  background-color: #f44336;
+  background-color: #f44336; /* Keep red for DELETE */
 }
 
 .endpoint-path {
@@ -307,12 +319,13 @@
   width: 100%;
   max-width: 500px;
   box-sizing: border-box;
+  color: #e0e0e0; /* Light text */
 }
 
 .endpoint-desc {
   flex: 2;
   font-size: 14px;
-  color: #666;
+  color: #b0b0b0; /* Light gray for description */
   overflow-wrap: break-word;
   word-break: break-word;
   hyphens: auto;
@@ -325,7 +338,7 @@
   border-radius: 0 0 4px 4px;
   margin-top: 0;
   overflow-y: auto;
-  border-left: 4px solid #3f51b5;
+  border-left: 4px solid #4caf50; /* Green for details */
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -335,7 +348,7 @@
 }
 
 .auth-section {
-  background-color: #f5f5f5;
+  background-color: #2e2e2e; /* Darker background */
   padding: 8px;
   border-radius: 4px;
   margin-bottom: 12px;
@@ -344,6 +357,7 @@
 .auth-section p {
   margin: 5px 0;
   font-size: 13px;
+  color: #b0b0b0; /* Light gray text */
 }
 
 .param-table, .error-table {
@@ -354,19 +368,20 @@
 
 .param-table th, .param-table td,
 .error-table th, .error-table td {
-  border: 1px solid #ddd;
+  border: 1px solid #333; /* Dark border */
   padding: 8px;
   text-align: left;
   font-size: 13px;
+  color: #e0e0e0; /* Light text */
 }
 
 .param-table th, .error-table th {
-  background-color: #f1f1f1;
+  background-color: #2e2e2e; /* Dark header background */
   font-weight: bold;
 }
 
 .param-table tr.required td {
-  color: #d32f2f;
+  color: #f44336; /* Red for required fields */
   font-weight: bold;
 }
 
@@ -384,7 +399,7 @@
 .response-schema h5 {
   font-size: 13px;
   margin-bottom: 5px;
-  color: #333;
+  color: #ffffff; /* White for headers */
 }
 
 .response-schema pre,
@@ -396,8 +411,8 @@
   word-break: break-all;
   overflow-x: auto;
   margin: 0;
-  color: #ffffff;
-  background-color: #333333;
+  color: #e0e0e0; /* Light text */
+  background-color: #2e2e2e; /* Dark code block background */
   padding: 8px;
   border-radius: 4px;
 }
@@ -408,7 +423,7 @@
 
 .detail-section h4 {
   font-size: 15px;
-  color: #333;
+  color: #ffffff; /* White for headers */
   margin-bottom: 5px;
 }
 
@@ -419,12 +434,12 @@
 
 .detail-section li {
   padding: 5px 0;
-  color: #444;
+  color: #b0b0b0; /* Light gray for list items */
   font-size: 13px;
 }
 
 .detail-section li.required {
-  color: #d32f2f;
+  color: #f44336; /* Red for required items */
   font-weight: bold;
 }
 
@@ -445,16 +460,17 @@
   padding: 10px 12px;
   font-size: 14px;
   font-family: 'Arial', sans-serif;
-  border: 1px solid #ddd;
+  border: 1px solid #333; /* Dark border */
   border-radius: 4px;
-  background-color: #fff;
+  background-color: #1e1e1e; /* Dark input background */
+  color: #e0e0e0; /* Light text */
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-input:focus {
-  border-color: #3f51b5;
-  box-shadow: 0 0 5px rgba(63, 81, 181, 0.3);
+  border-color: #4caf50; /* Green on focus */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
 
 /* Search button */
@@ -464,7 +480,7 @@
   font-family: 'Arial', sans-serif;
   font-weight: 500;
   color: #fff;
-  background-color: #3f51b5; /* Màu nền giống .api-header .version */
+  background-color: #4caf50; /* Green button */
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -475,7 +491,7 @@
 }
 
 .search-btn:hover {
-  background-color: #303f9f; /* Tông đậm hơn khi hover */
+  background-color: #66bb6a; /* Lighter green on hover */
   transform: translateY(-1px);
 }
 
@@ -503,6 +519,7 @@
   .api-header {
     padding-bottom: 6px;
     margin-bottom: 10px;
+    background-color: #000000; /* Dark header */
   }
 
   .api-header h1 {
@@ -524,11 +541,12 @@
   .route-sidebar {
     width: 100%;
     border-right: none;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #333;
     position: static;
     max-height: 40vh;
     overflow-y: auto;
     padding: 8px;
+    background-color: #000000; /* Dark sidebar */
   }
 
   .route-sidebar h2 {
@@ -549,6 +567,7 @@
     margin-top: 10px;
     padding: 10px;
     width: 100%;
+    background-color: #000000; /* Dark details background */
   }
 
   .endpoint-list {
@@ -604,14 +623,14 @@
     font-size: 14px;
   }
 
-  /* Đảm bảo không có cuộn ngang trong code blocks */
+  /* Ensure no horizontal scroll in code blocks */
   .response-schema pre,
   .detail-section pre {
     word-break: break-word;
     overflow-x: hidden;
   }
 
-  /* Tối ưu hóa bảng cho mobile */
+  /* Optimize tables for mobile */
   .param-table, .error-table {
     display: block;
     overflow-x: auto;
@@ -625,7 +644,7 @@
   .param-table tr, .error-table tr {
     display: block;
     margin-bottom: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #333; /* Dark border */
     border-radius: 4px;
     padding: 6px;
   }
@@ -644,6 +663,7 @@
     display: inline-block;
     width: 100px;
     font-size: 12px;
+    color: #e0e0e0; /* Light text */
   }
 
   .param-table td:first-child:before {
@@ -688,7 +708,7 @@
   }
 
   .search-btn::before {
-    transform: scale(0.9); /* Giảm kích thước icon trên mobile */
+    transform: scale(0.9);
   }
 }
 

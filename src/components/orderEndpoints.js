@@ -47,7 +47,7 @@ const orderEndpoints = [
           sdt: '0123456789',
           paymentMethod: 'cod',
           paymentStatus: 'pending',
-          shippingStatus: 'pending',
+          shippingStatus: 'failed', // Cập nhật ví dụ để bao gồm trạng thái failed
           returnStatus: 'none',
           returnRequestDate: null,
           returnReason: null,
@@ -121,7 +121,7 @@ const orderEndpoints = [
           sdt: '0123456789',
           paymentMethod: 'cod',
           paymentStatus: 'pending',
-          shippingStatus: 'pending',
+          shippingStatus: 'failed', // Cập nhật ví dụ để bao gồm trạng thái failed
           returnStatus: 'none',
           returnRequestDate: null,
           returnReason: null,
@@ -196,7 +196,7 @@ const orderEndpoints = [
         sdt: '0123456789',
         paymentMethod: 'cod',
         paymentStatus: 'pending',
-        shippingStatus: 'pending',
+        shippingStatus: 'failed', // Cập nhật ví dụ để bao gồm trạng thái failed
         returnStatus: 'none',
         returnRequestDate: null,
         returnReason: null,
@@ -271,7 +271,7 @@ const orderEndpoints = [
           sdt: '0123456789',
           paymentMethod: 'cod',
           paymentStatus: 'pending',
-          shippingStatus: 'pending',
+          shippingStatus: 'failed', // Cập nhật ví dụ để bao gồm trạng thái failed
           returnStatus: 'none',
           returnRequestDate: null,
           returnReason: null,
@@ -345,7 +345,7 @@ const orderEndpoints = [
         sdt: '0123456789',
         paymentMethod: 'cod',
         paymentStatus: 'pending',
-        shippingStatus: 'pending',
+        shippingStatus: 'failed', // Cập nhật ví dụ để bao gồm trạng thái failed
         returnStatus: 'none',
         returnRequestDate: null,
         returnReason: null,
@@ -433,7 +433,7 @@ const orderEndpoints = [
           sdt: '0123456789',
           paymentMethod: 'cod',
           paymentStatus: 'completed',
-          shippingStatus: 'pending',
+          shippingStatus: 'failed', // Cập nhật ví dụ để bao gồm trạng thái failed
           returnStatus: 'none',
           returnRequestDate: null,
           returnReason: null,
@@ -474,7 +474,7 @@ const orderEndpoints = [
       {
         name: 'shippingStatus',
         type: 'string',
-        description: 'Trạng thái vận chuyển mới (`pending`, `in_transit`, `delivered`, `returned`, `cancelled`)',
+        description: 'Trạng thái vận chuyển mới (`pending`, `in_transit`, `delivered`, `returned`, `cancelled`, `failed`)', // Cập nhật để bao gồm failed
         required: false,
         in: 'body',
       },
@@ -524,7 +524,7 @@ const orderEndpoints = [
     requestExample: {
       headers: { Authorization: 'Bearer <token>' },
       body: {
-        shippingStatus: 'in_transit',
+        shippingStatus: 'failed', // Cập nhật ví dụ để bao gồm trạng thái failed
         paymentStatus: 'completed',
         totalPrice: 250000,
         shippingAddress: {
@@ -581,7 +581,7 @@ const orderEndpoints = [
           sdt: '0123456789',
           paymentMethod: 'cod',
           paymentStatus: 'completed',
-          shippingStatus: 'in_transit',
+          shippingStatus: 'failed', // Cập nhật ví dụ để bao gồm trạng thái failed
           returnStatus: 'none',
           returnRequestDate: null,
           returnReason: null,

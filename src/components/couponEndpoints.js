@@ -137,20 +137,7 @@ const couponEndpoints = [
       status: 200,
       description: 'Xóa mã giảm giá thành công',
       example: {
-        message: 'Xóa mã giảm giá thành công',
-        coupon: {
-          _id: '60d5f8e9b1a2b4f8e8f9e2c5',
-          code: 'DISCOUNT10',
-          discountType: 'percentage',
-          discountValue: 10,
-          minOrderValue: 100000,
-          expiryDate: '2025-12-31T23:59:59Z',
-          usageLimit: 100,
-          usedCount: 0,
-          isActive: true,
-          createdAt: '2025-07-09T00:00:00Z',
-          updatedAt: '2025-07-09T00:00:00Z'
-        }
+        message: 'Xóa mã giảm giá thành công'
       }
     },
     errorResponses: [
@@ -165,7 +152,7 @@ const couponEndpoints = [
     method: 'GET',
     path: '/api/coupons',
     description: 'Lấy danh sách mã giảm giá',
-    fullDescription: 'Trả về danh sách mã giảm giá với phân trang, không bao gồm trường `usedCount`. Hỗ trợ query `page` và `limit`. Yêu cầu xác thực thông qua token JWT, có thể truy cập bởi bất kỳ người dùng đã đăng nhập, không yêu cầu quyền admin.',
+    fullDescription: 'Trả về danh sách mã giảm giá với phân trang, không bao gồm trường `usedCount`. Hỗ trợ query `page`, `limit`, `code`, và `isActive`. Yêu cầu xác thực thông qua token JWT, có thể truy cập bởi bất kỳ người dùng đã đăng nhập, không yêu cầu quyền admin.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
@@ -173,13 +160,14 @@ const couponEndpoints = [
     },
     parameters: [
       { name: 'page', type: 'number', description: 'Số trang (mặc định: 1)', required: false, in: 'query' },
-      { name: 'limit', type: 'number', description: 'Số lượng mã mỗi trang (mặc định: 10)', required: false, in: 'query' }
+      { name: 'limit', type: 'number', description: 'Số lượng mã mỗi trang (mặc định: 9)', required: false, in: 'query' },
+      { name: 'code', type: 'string', description: 'Lọc theo mã giảm giá (không phân biệt hoa thường)', required: false, in: 'query' },
+      { name: 'isActive', type: 'boolean', description: 'Lọc theo trạng thái kích hoạt (true hoặc false)', required: false, in: 'query' }
     ],
     response: {
       status: 200,
       description: 'Lấy danh sách mã giảm giá thành công',
       example: {
-        message: 'Lấy danh sách mã giảm giá thành công',
         coupons: [
           {
             _id: '60d5f8e9b1a2b4f8e8f9e2c5',
@@ -190,13 +178,14 @@ const couponEndpoints = [
             expiryDate: '2025-12-31T23:59:59Z',
             usageLimit: 100,
             isActive: true,
+            userId: null,
             createdAt: '2025-07-09T00:00:00Z',
             updatedAt: '2025-07-09T00:00:00Z'
           }
         ],
         pagination: {
           page: 1,
-          limit: 10,
+          limit: 9,
           total: 1,
           totalPages: 1
         }
@@ -224,7 +213,6 @@ const couponEndpoints = [
       status: 200,
       description: 'Lấy chi tiết mã giảm giá thành công',
       example: {
-        message: 'Lấy chi tiết mã giảm giá thành công',
         coupon: {
           _id: '60d5f8e9b1a2b4f8e8f9e2c5',
           code: 'DISCOUNT10',
@@ -234,6 +222,7 @@ const couponEndpoints = [
           expiryDate: '2025-12-31T23:59:59Z',
           usageLimit: 100,
           isActive: true,
+          userId: null,
           createdAt: '2025-07-09T00:00:00Z',
           updatedAt: '2025-07-09T00:00:00Z'
         }
@@ -243,6 +232,68 @@ const couponEndpoints = [
       { status: 400, description: 'ID mã giảm giá không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 404, description: 'Mã giảm giá không tồn tại' },
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' }
+    ]
+  },
+  {
+    method: 'GET',
+    path: '/api/coupons/user/:userId',
+    description: 'Lấy danh sách mã giảm giá theo userId',
+    fullDescription: 'Trả về danh sách mã giảm giá liên kết với một userId cụ thể, hỗ trợ phân trang và lọc theo trạng thái kích hoạt. Không bao gồm trường `usedCount`. Yêu cầu xác thực thông qua token JWT, có thể truy cập bởi bất kỳ người dùng đã đăng nhập, không yêu cầu quyền admin.',
+    auth: {
+      required: true,
+      header: 'Authorization: Bearer <token>',
+      description: 'Token JWT của người dùng được yêu cầu trong header, lấy từ endpoint `/api/auth/login`.'
+    },
+    parameters: [
+      { name: 'userId', type: 'string', description: 'ObjectId của người dùng', required: true, in: 'path' },
+      { name: 'page', type: 'number', description: 'Số trang (mặc định: 1)', required: false, in: 'query' },
+      { name: 'limit', type: 'number', description: 'Số lượng mã mỗi trang (mặc định: 9)', required: false, in: 'query' },
+      { name: 'isActive', type: 'boolean', description: 'Lọc theo trạng thái kích hoạt (true hoặc false)', required: false, in: 'query' }
+    ],
+    requestExample: {
+      headers: { 'Authorization': 'Bearer <token>' },
+      query: {
+        page: 1,
+        limit: 9,
+        isActive: true
+      }
+    },
+    response: {
+      status: 200,
+      description: 'Lấy danh sách mã giảm giá theo userId thành công',
+      example: {
+        coupons: [
+          {
+            _id: '60d5f8e9b1a2b4f8e8f9e2c6',
+            code: 'USERDISCOUNT',
+            discountType: 'fixed',
+            discountValue: 50000,
+            minOrderValue: 200000,
+            expiryDate: '2025-12-31T23:59:59Z',
+            usageLimit: 1,
+            isActive: true,
+            userId: {
+              _id: '507f1f77bcf86cd799439011',
+              email: 'user@example.com',
+              username: 'username'
+            },
+            createdAt: '2025-07-09T00:00:00Z',
+            updatedAt: '2025-07-09T00:00:00Z'
+          }
+        ],
+        pagination: {
+          page: 1,
+          limit: 9,
+          total: 1,
+          totalPages: 1
+        }
+      }
+    },
+    errorResponses: [
+      { status: 400, description: 'ID người dùng không hợp lệ' },
+      { status: 401, description: 'Không có token hoặc token không hợp lệ' },
+      { status: 404, description: 'Người dùng không tồn tại' },
       { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' }
     ]
   }

@@ -345,7 +345,13 @@ const cartEndpoints = [
       { status: 400, description: 'Giỏ hàng trống hoặc không chứa sản phẩm hợp lệ' },
       { status: 400, description: 'Số điện thoại không đúng định dạng (phải là 10 chữ số)' },
       { status: 400, description: 'Không đủ số lượng tồn kho cho một hoặc nhiều sản phẩm' },
-      { status: 400, description: 'Mã giảm giá không hợp lệ, hết hạn, hoặc không đáp ứng điều kiện' },
+      { status: 400, description: 'Mã giảm giá không tồn tại' },
+      { status: 400, description: 'Mã giảm giá không còn hoạt động' },
+      { status: 400, description: 'Mã giảm giá đã hết hạn' },
+      { status: 400, description: 'Đơn hàng phải có giá trị tối thiểu <minOrderValue> để sử dụng mã này' },
+      { status: 400, description: 'Mã giảm giá đã đạt giới hạn sử dụng' },
+      { status: 400, description: 'Mã giảm giá này chỉ áp dụng cho người dùng cụ thể' },
+      { status: 403, description: 'Bạn không có quyền sử dụng mã giảm giá này' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 404, description: 'Người dùng hoặc giỏ hàng không tồn tại' },
       { status: 500, description: 'Lỗi máy chủ' }
@@ -355,18 +361,18 @@ const cartEndpoints = [
     method: 'POST',
     path: '/api/carts/update-price',
     description: 'Cập nhật giá giỏ hàng',
-    fullDescription: 'Tính toán giá giỏ hàng của người dùng, bao gồm tổng phụ (subtotal), giảm giá (nếu áp dụng mã giảm giá), và tổng cộng. Yêu cầu xác thực thông qua token JWT.',
+    fullDescription: 'Tính toán giá giỏ hàng của người dùng, bao gồm tổng phụ (subtotal), giảm giá (nếu áp dụng mã giảm giá), và tổng cộng. Nếu mã giảm giá có userId cụ thể, chỉ người dùng với userId khớp mới có thể sử dụng. Nếu mã không có userId, bất kỳ người dùng nào cũng có thể sử dụng. Yêu cầu xác thực thông qua token JWT.',
     auth: {
       required: true,
       header: 'Authorization: Bearer <token>',
-      description: 'Token JWT của người dùng được yêu cầu trong header.'
+      description: 'Token JWT của người dùng được yêu cầu trong header, lấy từ endpoint `/api/auth/login`.'
     },
     parameters: [
       { name: 'userId', type: 'string', description: 'ObjectId của người dùng, gửi qua query hoặc body', required: true },
       { name: 'couponCode', type: 'string', description: 'Mã giảm giá (nếu có)', required: false }
     ],
     requestExample: {
-      headers: { 'Authorization': 'Bearer <token>' },
+      headers: { 'Authorization': 'Bearer <token>', 'Content-Type': 'application/json' },
       body: {
         userId: '60d5f8e9b1a2b4f8e8f9e2b0',
         couponCode: 'DISCOUNT10'
@@ -376,15 +382,43 @@ const cartEndpoints = [
       status: 200,
       description: 'Cập nhật giá thành công',
       example: {
+        success: true,
+        message: 'Mã giảm giá đã được áp dụng thành công',
         subtotal: 160000,
         discount: 16000,
-        total: 144000
+        total: 144000,
+        cart: {
+          _id: '60d5f8e9b1a2b4f8e8f9e2c1',
+          items: [
+            {
+              product: {
+                _id: '60d5f8e9b1a2b4f8e8f9e2b1',
+                name: 'Sản phẩm A',
+                images: ['image1.jpg']
+              },
+              option: {
+                _id: '60d5f8e9b1a2b4f8e8f9e2b2',
+                value: 'Màu đỏ',
+                price: 100000,
+                discount_price: 80000,
+                stock: 50
+              },
+              quantity: 2
+            }
+          ]
+        }
       }
     },
     errorResponses: [
       { status: 400, description: 'Thiếu hoặc userId không hợp lệ' },
       { status: 400, description: 'Giỏ hàng trống hoặc không chứa sản phẩm hợp lệ' },
-      { status: 400, description: 'Mã giảm giá không hợp lệ, không hoạt động, hết hạn, hoặc không đáp ứng điều kiện' },
+      { status: 400, description: 'Mã giảm giá không tồn tại' },
+      { status: 400, description: 'Mã giảm giá không còn hoạt động' },
+      { status: 400, description: 'Mã giảm giá đã hết hạn' },
+      { status: 400, description: 'Đơn hàng phải có giá trị tối thiểu <minOrderValue> để sử dụng mã này' },
+      { status: 400, description: 'Mã giảm giá đã đạt giới hạn sử dụng' },
+      { status: 400, description: 'Mã giảm giá này chỉ áp dụng cho người dùng cụ thể' },
+      { status: 403, description: 'Bạn không có quyền sử dụng mã giảm giá này' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 404, description: 'Người dùng hoặc giỏ hàng không tồn tại' },
       { status: 500, description: 'Lỗi máy chủ' }

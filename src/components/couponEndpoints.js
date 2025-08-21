@@ -16,7 +16,8 @@ const couponEndpoints = [
       { name: 'minOrderValue', type: 'number', description: 'Giá trị đơn hàng tối thiểu để áp dụng mã (mặc định: 0)', required: false, in: 'body' },
       { name: 'expiryDate', type: 'string', description: 'Ngày hết hạn của mã (định dạng ISO, ví dụ: `2025-12-31T23:59:59Z`)', required: false, in: 'body' },
       { name: 'usageLimit', type: 'number', description: 'Số lần sử dụng tối đa của mã (null nếu không giới hạn)', required: false, in: 'body' },
-      { name: 'isActive', type: 'boolean', description: 'Trạng thái kích hoạt của mã (mặc định: true)', required: false, in: 'body' }
+      { name: 'isActive', type: 'boolean', description: 'Trạng thái kích hoạt của mã (mặc định: true)', required: false, in: 'body' },
+      { name: 'userId', type: 'string', description: 'ObjectId của người dùng được liên kết với mã (null nếu áp dụng cho tất cả người dùng)', required: false, in: 'body' }
     ],
     requestExample: {
       headers: { 'Authorization': 'Bearer <token>', 'Content-Type': 'application/json' },
@@ -27,7 +28,8 @@ const couponEndpoints = [
         minOrderValue: 100000,
         expiryDate: '2025-12-31T23:59:59Z',
         usageLimit: 100,
-        isActive: true
+        isActive: true,
+        userId: null
       }
     },
     response: {
@@ -45,6 +47,7 @@ const couponEndpoints = [
           usageLimit: 100,
           usedCount: 0,
           isActive: true,
+          userId: null,
           createdAt: '2025-07-09T00:00:00Z',
           updatedAt: '2025-07-09T00:00:00Z'
         }
@@ -55,6 +58,7 @@ const couponEndpoints = [
       { status: 400, description: 'Mã giảm giá đã tồn tại' },
       { status: 400, description: 'Loại giảm giá không hợp lệ, chỉ được là `percentage` hoặc `fixed`' },
       { status: 400, description: 'Giá trị giảm giá phải không âm' },
+      { status: 400, description: 'ID người dùng không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' }
@@ -78,7 +82,8 @@ const couponEndpoints = [
       { name: 'minOrderValue', type: 'number', description: 'Giá trị đơn hàng tối thiểu mới', required: false, in: 'body' },
       { name: 'expiryDate', type: 'string', description: 'Ngày hết hạn mới (định dạng ISO)', required: false, in: 'body' },
       { name: 'usageLimit', type: 'number', description: 'Số lần sử dụng tối đa mới', required: false, in: 'body' },
-      { name: 'isActive', type: 'boolean', description: 'Trạng thái kích hoạt mới', required: false, in: 'body' }
+      { name: 'isActive', type: 'boolean', description: 'Trạng thái kích hoạt mới', required: false, in: 'body' },
+      { name: 'userId', type: 'string', description: 'ObjectId của người dùng được liên kết với mã (null nếu áp dụng cho tất cả người dùng)', required: false, in: 'body' }
     ],
     requestExample: {
       headers: { 'Authorization': 'Bearer <token>', 'Content-Type': 'application/json' },
@@ -86,7 +91,8 @@ const couponEndpoints = [
         code: 'DISCOUNT10',
         discountType: 'fixed',
         discountValue: 20000,
-        isActive: false
+        isActive: false,
+        userId: null
       }
     },
     response: {
@@ -104,6 +110,7 @@ const couponEndpoints = [
           usageLimit: 100,
           usedCount: 0,
           isActive: false,
+          userId: null,
           createdAt: '2025-07-09T00:00:00Z',
           updatedAt: '2025-07-09T01:00:00Z'
         }
@@ -114,6 +121,7 @@ const couponEndpoints = [
       { status: 400, description: 'Mã giảm giá mới đã tồn tại' },
       { status: 400, description: 'Loại giảm giá không hợp lệ, chỉ được là `percentage` hoặc `fixed`' },
       { status: 400, description: 'Giá trị giảm giá phải không âm' },
+      { status: 400, description: 'ID người dùng không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 403, description: 'Không có quyền admin' },
       { status: 404, description: 'Mã giảm giá không tồn tại' },
@@ -294,6 +302,56 @@ const couponEndpoints = [
       { status: 400, description: 'ID người dùng không hợp lệ' },
       { status: 401, description: 'Không có token hoặc token không hợp lệ' },
       { status: 404, description: 'Người dùng không tồn tại' },
+      { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' }
+    ]
+  },
+  {
+    method: 'POST',
+    path: '/api/coupons/check/:code',
+    description: 'Kiểm tra mã giảm giá',
+    fullDescription: 'Kiểm tra tính hợp lệ của một mã giảm giá dựa trên mã và userId (nếu có). Mã phải đang hoạt động, chưa hết hạn, chưa vượt giới hạn sử dụng, và đáp ứng giá trị đơn hàng tối thiểu. Nếu mã có userId cụ thể, chỉ người dùng với userId khớp mới có thể sử dụng. Nếu mã không có userId, bất kỳ người dùng nào cũng có thể sử dụng. Yêu cầu xác thực thông qua token JWT, có thể truy cập bởi bất kỳ người dùng đã đăng nhập.',
+    auth: {
+      required: true,
+      header: 'Authorization: Bearer <token>',
+      description: 'Token JWT của người dùng được yêu cầu trong header, lấy từ endpoint `/api/auth/login`.'
+    },
+    parameters: [
+      { name: 'code', type: 'string', description: 'Mã giảm giá cần kiểm tra', required: true, in: 'path' },
+      { name: 'userId', type: 'string', description: 'ObjectId của người dùng (bắt buộc nếu mã giảm giá liên kết với một userId cụ thể, không bắt buộc nếu mã áp dụng cho tất cả người dùng)', required: false, in: 'body' },
+      { name: 'orderValue', type: 'number', description: 'Giá trị đơn hàng để kiểm tra điều kiện minOrderValue (mặc định: 0)', required: false, in: 'body' }
+    ],
+    requestExample: {
+      headers: { 'Authorization': 'Bearer <token>', 'Content-Type': 'application/json' },
+      params: { code: 'DISCOUNT10' },
+      body: {
+        userId: '507f1f77bcf86cd799439011',
+        orderValue: 150000
+      }
+    },
+    response: {
+      status: 200,
+      description: 'Mã giảm giá hợp lệ',
+      example: {
+        message: 'Mã giảm giá hợp lệ',
+        coupon: {
+          code: 'DISCOUNT10',
+          discountType: 'percentage',
+          discountValue: 10,
+          minOrderValue: 100000,
+          expiryDate: '2025-12-31T23:59:59Z'
+        }
+      }
+    },
+    errorResponses: [
+      { status: 400, description: 'Mã giảm giá là bắt buộc' },
+      { status: 400, description: 'ID người dùng không hợp lệ' },
+      { status: 400, description: 'Mã giảm giá này chỉ áp dụng cho người dùng cụ thể' },
+      { status: 400, description: 'Mã giảm giá đã hết hạn' },
+      { status: 400, description: 'Mã giảm giá đã đạt giới hạn sử dụng' },
+      { status: 400, description: 'Đơn hàng phải đạt tối thiểu <minOrderValue> VNĐ' },
+      { status: 401, description: 'Không có token hoặc token không hợp lệ' },
+      { status: 403, description: 'Bạn không có quyền sử dụng mã giảm giá này' },
+      { status: 404, description: 'Mã giảm giá không tồn tại hoặc không hoạt động' },
       { status: 500, description: 'Lỗi máy chủ, có thể do kết nối database' }
     ]
   }

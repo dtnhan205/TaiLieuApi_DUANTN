@@ -18,6 +18,7 @@ import MBBank from './MBBank';
 import Interface from './Interface';
 import Contact from './Contact';
 import Vnpay from './Vnpay';
+import ChatBot from './Chatbot';  
 
 import './css/ApiDocs.css';
 
@@ -41,6 +42,7 @@ const ApiDocs = () => {
     { name: 'users', label: 'Users', component: Users },
     { name: 'interface', label: 'Interface', component: Interface },
     { name: 'contact', label: 'Contact', component: Contact },
+    { name: 'chatbot', label: 'ChatBot', component: ChatBot },
     { name: 'mbBank', label: 'MB Bank', component: MBBank },
     { name: 'vnpay', label: 'VNPay', component: Vnpay },
     { name: 'payment', label: 'Payment', component: Payment },
